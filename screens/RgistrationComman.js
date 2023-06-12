@@ -25,14 +25,14 @@ const RgistrationComman = () => {
         placeholder="Email"
         placeholderTextColor="#000"
       />
-      <RNKDatepicker
+      {/* <RNKDatepicker
         placeholder={() => (
           <Text style={styles.dobBtnDatePickerPlaceHolder}>Date of birth</Text>
         )}
         date={dobBtnDatePicker}
         onSelect={setDobBtnDatePicker}
         controlStyle={styles.dobBtnDatePickerValue}
-      />
+      /> */}
       <TextInput
         style={[styles.ageBtn, styles.btnSpaceBlock]}
         placeholder="Age"
@@ -57,14 +57,14 @@ const RgistrationComman = () => {
         </Pressable>
       </View>
       <View style={styles.whoIsRegisteringBtn}>
-        <DropDownPicker
+        {/* <DropDownPicker
           open={whoIsRegisteringBtnOpen}
           setOpen={setWhoIsRegisteringBtnOpen}
           value={whoIsRegisteringBtnValue}
           setValue={setWhoIsRegisteringBtnValue}
           placeholder="Register As A"
           labelStyle={styles.whoIsRegisteringBtnValue}
-        />
+        /> */}
       </View>
     </View>
   );

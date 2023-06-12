@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   loadMore: {
     fontSize: FontSize.size_sm,
-    textDecoration: "underline",
+    // textDecoration: "underline",
     color: Color.red,
     textAlign: "center",
     marginTop: 14,
