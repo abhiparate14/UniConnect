@@ -16,14 +16,13 @@ const LANDINGPAGE = () => {
           </Text>
       </View>
       <View style={styles.login}>
+        <Text style={[styles.dopeStudioWith, styles.areYouNewFlexBox]}>
+          Create a account
+        </Text>
         <Pressable
           style={styles.loginChild}
           onPress={() => navigation.navigate("RgistrationComman")}
         />
-        <Text style={[styles.dopeStudioWith, styles.areYouNewFlexBox]}>
-          Create a account
-        </Text>
-        
       </View>
     </View>
   );
