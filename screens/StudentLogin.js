@@ -1,10 +1,44 @@
 import * as React from "react";
 import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCFx_aqbn7z-7oRTCXw0y6GX644fpXNgHU",
+  authDomain: "uniconnect-44.firebaseapp.com",
+  projectId: "uniconnect-44",
+  storageBucket: "uniconnect-44.appspot.com",
+  messagingSenderId: "924017155867",
+  appId: "1:924017155867:web:a7a4f5ece4c010c2ab7dbe",
+  measurementId: "G-N217FSBXTF"
+};
+
+// Initialize Firebase
+
+
 
 const StudentLogin = () => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
+  function navigateToStudentHome() {
+    // check the username and password
+    // if correct then navigate to student home
+    // else show error message
+
+    // navigation.navigate("StudentHome");
+    // console.log(analytics);
+    // console.log(firebase);
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    console.log(analytics);
+  }
 
   return (
     <View style={styles.studentLogin}>
@@ -23,7 +57,7 @@ const StudentLogin = () => {
       />
       <Pressable
         style={[styles.signIn, styles.signInLayout]}
-        onPress={() => navigation.navigate("StudentHome")}
+        onPress={navigateToStudentHome}
       >
         <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
       </Pressable>
