@@ -8,12 +8,10 @@ import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 const RgistrationComman = () => {
   const [dobBtnDatePicker, setDobBtnDatePicker] = useState(undefined);
   const [whoIsRegisteringBtnOpen, setWhoIsRegisteringBtnOpen] = useState(false);
-  const [whoIsRegisteringBtnValue, setWhoIsRegisteringBtnValue] = useState("");
   const navigation = useNavigation();
 
   return (
     <View style={styles.rgistrationComman}>
-      <View style={[styles.rgistrationCommanChild, styles.passwordBtnLayout]} />
       <View style={[styles.rgistrationCommanChild, styles.passwordBtnLayout]} />
       <TextInput
         style={[styles.nameBtn, styles.btnTypo]}
@@ -25,14 +23,14 @@ const RgistrationComman = () => {
         placeholder="Email"
         placeholderTextColor="#000"
       />
-      <RNKDatepicker
+      {/* <RNKDatepicker
         placeholder={() => (
           <Text style={styles.dobBtnDatePickerPlaceHolder}>Date of birth</Text>
         )}
         date={dobBtnDatePicker}
         onSelect={setDobBtnDatePicker}
         controlStyle={styles.dobBtnDatePickerValue}
-      />
+      /> */}
       <TextInput
         style={[styles.ageBtn, styles.btnSpaceBlock]}
         placeholder="Age"
@@ -43,29 +41,22 @@ const RgistrationComman = () => {
         placeholder="Password"
         placeholderTextColor="#000"
       />
-      <View style={[styles.outer, styles.outerLayout]}>
-        <Text style={[styles.registerAccount, styles.registerFlexBox]}>
-          Register Account
-        </Text>
-        <Pressable
-          style={[styles.registerBtn, styles.btnSpaceBlock]}
-          onPress={() => navigation.navigate("LANDINGPAGE")}
-        >
-          <Text style={[styles.register, styles.registerFlexBox]}>
-            Register
-          </Text>
-        </Pressable>
-      </View>
-      <View style={styles.whoIsRegisteringBtn}>
-        {/* <DropDownPicker
+      <Text style={[styles.registerAccount, styles.registerFlexBox]}>
+        Register Account
+      </Text>
+      <Pressable
+        style={[styles.registerBtn, styles.btnSpaceBlock]}
+        onPress={() => navigation.navigate("LANDINGPAGE")}
+      >
+        <Text style={[styles.register, styles.registerFlexBox]}>Register</Text>
+      </Pressable>
+      {/* <View style={styles.whoIsRegisteringBtn} placeholder="Register As A">
+        <DropDownPicker
           open={whoIsRegisteringBtnOpen}
           setOpen={setWhoIsRegisteringBtnOpen}
-          value={whoIsRegisteringBtnValue}
-          setValue={setWhoIsRegisteringBtnValue}
-          placeholder="Register As A"
           labelStyle={styles.whoIsRegisteringBtnValue}
-        /> */}
-      </View>
+        />
+      </View> */}
     </View>
   );
 };
@@ -76,20 +67,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 20,
   },
-  dobBtnDatePickerValue: {
-    position: "absolute",
-    top: 368,
-    left: 46,
-    borderRadius: 20,
-    width: 256,
-    height: 45,
-    flexDirection: "column",
-    paddingHorizontal: 36,
-    paddingVertical: 11,
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    backgroundColor: "#dae5d0",
-  },
+  dobBtnDatePickerValue: {},
   whoIsRegisteringBtnValue: {
     color: "#000",
     fontSize: 20,
@@ -106,10 +84,6 @@ const styles = StyleSheet.create({
   btnSpaceBlock: {
     paddingVertical: Padding.p_2xs,
     borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  outerLayout: {
-    width: 206,
     position: "absolute",
   },
   registerFlexBox: {
@@ -173,14 +147,15 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   registerAccount: {
-    top: 0,
-    left: 0,
+    top: 109,
+    left: 77,
     fontSize: FontSize.size_5xl,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
-    height: 41,
     width: 206,
+    height: 41,
     position: "absolute",
+    color: Color.black,
   },
   register: {
     width: 115,
@@ -189,18 +164,13 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interRegular,
   },
   registerBtn: {
-    top: 578,
-    left: 14,
+    top: 687,
+    left: 91,
     backgroundColor: Color.silver,
     width: 165,
     height: 49,
     paddingHorizontal: 6,
     alignItems: "flex-end",
-  },
-  outer: {
-    top: 109,
-    left: 77,
-    height: 627,
   },
   whoIsRegisteringBtn: {
     top: 597,
