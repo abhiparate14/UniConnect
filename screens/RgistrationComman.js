@@ -25,14 +25,14 @@ const RgistrationComman = () => {
         placeholder="Email"
         placeholderTextColor="#000"
       />
-      {/* <RNKDatepicker
+      <RNKDatepicker
         placeholder={() => (
           <Text style={styles.dobBtnDatePickerPlaceHolder}>Date of birth</Text>
         )}
         date={dobBtnDatePicker}
         onSelect={setDobBtnDatePicker}
         controlStyle={styles.dobBtnDatePickerValue}
-      /> */}
+      />
       <TextInput
         style={[styles.ageBtn, styles.btnSpaceBlock]}
         placeholder="Age"
