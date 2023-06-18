@@ -27,12 +27,10 @@ const InstructorLogin = () => {
       >
         <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
       </Pressable>
-      <View style={styles.outerText}>
-        <Text style={[styles.instructor, styles.signIn1Clr]}>Instructor</Text>
-        <Text style={[styles.forgotPassword, styles.signIn1Typo]}>
-          Forgot Password
-        </Text>
-      </View>
+      <Text style={[styles.instructor, styles.signIn1Clr]}>Instructor</Text>
+      <Text style={[styles.forgotPassword, styles.signIn1Typo]}>
+        Forgot Password
+      </Text>
     </View>
   );
 };
@@ -91,25 +89,21 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   instructor: {
+    top: 96,
+    left: 121,
     fontSize: FontSize.size_5xl,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
     textAlign: "left",
+    position: "absolute",
   },
   forgotPassword: {
-    // textDecoration: "underline",
+    top: 633,
+    left: 100,
+    textDecorationLine: "underline",
     color: Color.red,
-    marginTop: 508,
     width: 160,
     textAlign: "left",
-  },
-  outerText: {
-    top: 96,
-    left: 100,
-    height: 561,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 160,
     position: "absolute",
   },
   instructorLogin: {

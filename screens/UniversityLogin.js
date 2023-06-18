@@ -27,17 +27,15 @@ const UniversityLogin = () => {
       >
         <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
       </Pressable>
-      <View style={styles.outerText}>
-        <Text style={[styles.university, styles.signIn1Clr]}>University</Text>
-        <Pressable
-          style={styles.forgotPassword}
-          onPress={() => navigation.navigate("UniversityHome")}
-        >
-          <Text style={[styles.forgotPassword1, styles.signIn1Typo]}>
-            Forgot Password
-          </Text>
-        </Pressable>
-      </View>
+      <Text style={[styles.university, styles.signIn1Clr]}>University</Text>
+      <Pressable
+        style={styles.forgotPassword}
+        onPress={() => navigation.navigate("UniversityHome")}
+      >
+        <Text style={[styles.forgotPassword1, styles.signIn1Typo]}>
+          Forgot Password
+        </Text>
+      </Pressable>
     </View>
   );
 };
@@ -96,27 +94,23 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   university: {
+    top: 97,
+    left: 120,
     fontSize: FontSize.size_5xl,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
     textAlign: "left",
+    position: "absolute",
   },
   forgotPassword1: {
-    // textDecoration: "underline",
+    textDecorationLine: "underline",
     color: Color.red,
     width: 160,
     textAlign: "left",
   },
   forgotPassword: {
-    marginTop: 508,
-  },
-  outerText: {
-    top: 97,
     left: 100,
-    height: 561,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 160,
+    top: 634,
     position: "absolute",
   },
   universityLogin: {
