@@ -14,6 +14,8 @@ const StudentHome = () => {
       <ScrollView
         style={styles.card1Parent}
         contentContainerStyle={styles.frameScrollViewContent}
+        scrollEnabled={true}
+        height={600}
       >
         <ExploreContainer />
         <ExploreCard
