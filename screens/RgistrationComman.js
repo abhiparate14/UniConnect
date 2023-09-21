@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TextInput, Text, Pressable, TouchableOpacity } from "react-native";
-import { Datepicker as RNKDatepicker } from "@ui-kitten/components";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { initializeApp } from 'firebase/app';
+import { getFirestore, setDoc, doc, getDoc} from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const RegistrationCommon = () => {
   const [isDropDownVisible, setDropDownVisible] = useState(false);
@@ -16,6 +18,74 @@ const RegistrationCommon = () => {
   const [agetext, setAgeText] = useState('');
   const [passwordtext, setPasswordText] = useState('');
   const navigation = useNavigation();
+  const [isError, setError] = useState(false);
+
+  // start firebase section
+
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBcbuLJaODarVj-wngx47X3D2vlsiETTdY",
+    authDomain: "notes-app-44.firebaseapp.com",
+    projectId: "notes-app-44",
+    storageBucket: "notes-app-44.appspot.com",
+    messagingSenderId: "70213484242",
+    appId: "1:70213484242:web:ec0208ffd06279a4ee770b",
+    measurementId: "G-VV2PSYYYFV"
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  //STARTFIREBASE-AUTH
+  function createNewUser(email, password){
+    const auth = getAuth(app);
+    if(email === '' || password === ''){
+      alert("Please enter email and password");
+      return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("error code:", errorCode);
+      console.log("error message:", errorMessage);
+      alert(errorMessage);
+      setError(true);
+    });
+    if(!isError){
+      alert("Success");
+    }
+  }
+  //END OF FIREBASE-AUTH
+  
+
+    async function sendData() {
+      
+      const firebase= getFirestore(app);
+      const nowId = usernameText;
+
+
+      await setDoc(doc(firebase, valueDropDown, nowId), {
+
+        id: Math.random().toString(),
+        // actualData: dataforfirebase,
+        username: usernameText,
+        email: emailtext,
+        age: agetext,
+        password: passwordtext,
+        dob: selectedDate,
+        type: valueDropDown,
+
+      });
+
+      // const myData = await getDoc(doc(firebase, valueDropDown, nowId));
+      // console.log(myData.data());
+      // console.log(myData.data().actualData);
+
+
+    }
+
+  // end firebase section
 
   var myPageName = 'LANDINGPAGE';
 
@@ -29,25 +99,38 @@ const RegistrationCommon = () => {
   }
 
   const usernameTextHandler = (username) => {
-    setUsernameText(username);
+    if (username != ''){
+      setUsernameText(username);
+    }
+    
   }
 
   const emailTextHandler = (email) => {
-    setEmailText(email);
+    if (email != ''){
+      setEmailText(email);
+    }
   }
 
   const ageTextHandler = (age) => {
-    setAgeText(age);
+    if (!isNaN(+age)) {
+      setAgeText(age);
+    }
+    
   }
 
   const passwordTextHandler = (password) => {
-    setPasswordText(password);
+    if (password != ''){
+      setPasswordText(password);
+    }
+    
   }
 
   const navigatetoanotherpage = (x) => {
     // printDetails();
+    createNewUser(emailtext, passwordtext);
+    sendData();
     if (valueDropDown == 'student') {
-      myPageName = 'StudentHome';
+      myPageName = 'StudentLogin';
       navigation.navigate(myPageName);
     } else if (valueDropDown == 'instructor') {
       myPageName = 'InstructerInfo';
@@ -58,6 +141,7 @@ const RegistrationCommon = () => {
     } else {
       myPageName = 'LANDINGPAGE';
     }
+
   };
 
   const whoIsRegisteringOptions = [
@@ -89,6 +173,7 @@ const RegistrationCommon = () => {
         style={[styles.nameBtn, styles.btnTypo]}
         placeholder="User Name"
         placeholderTextColor="#000"
+        autoCapitalize='none'
         value={usernameText}
         onChangeText={usernameTextHandler}
       />
@@ -96,6 +181,8 @@ const RegistrationCommon = () => {
         style={[styles.emailBtn, styles.btnTypo]}
         placeholder="Email"
         placeholderTextColor="#000"
+        keyboardType='email-address'
+        autoCapitalize='none'
         value={emailtext}
         onChangeText={emailTextHandler}
       />
@@ -123,14 +210,18 @@ const RegistrationCommon = () => {
         placeholder="Age"
         placeholderTextColor="#000"
         value={agetext}
+        keyboardType="numeric"
         onChangeText={ageTextHandler}
+        
       />
       <TextInput
         style={[styles.passwordBtn, styles.btnTypo]}
         placeholder="Password"
         placeholderTextColor="#000"
+        autoCapitalize='none'
         value={passwordtext}
         onChangeText={passwordTextHandler}
+        secureTextEntry={true}
       />
       <Text style={[styles.registerAccount, styles.registerFlexBox]}>
         Register Account

@@ -4,7 +4,25 @@ import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 
 const UniversityLogin = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation();const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const usernameTextHandler = (username) => {
+    setUsername(username);
+  }
+
+  const passwordTextHandler = (password) => {
+    setPassword(password);
+  }
+
+  const printDetails = () => {
+    console.log("Username: "+username+"\n"+"Password:"+password);
+  }
+
+  const beforeNavigation = () => {
+    printDetails();
+    navigation.navigate("UniversityDetails");
+  }
 
   return (
     <View style={styles.universityLogin}>
@@ -14,16 +32,20 @@ const UniversityLogin = () => {
         placeholder="Username"
         keyboardType="default"
         placeholderTextColor="#000"
+        value={username}
+        onChangeText={usernameTextHandler}
       />
       <TextInput
         style={[styles.password, styles.usernameLayout]}
         placeholder="Password"
         keyboardType="default"
         placeholderTextColor="#000"
+        value={password}
+        onChangeText={passwordTextHandler}
       />
       <Pressable
         style={[styles.signIn, styles.signInLayout]}
-        onPress={() => navigation.navigate("UniversityDetails")}
+        onPress={() => beforeNavigation()}
       >
         <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
       </Pressable>

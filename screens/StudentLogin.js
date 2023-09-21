@@ -2,9 +2,69 @@ import * as React from "react";
 import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
+import { initializeApp } from 'firebase/app';
+// import { getFirestore} from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 
 const StudentLogin = () => {
   const navigation = useNavigation();
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [isError, setError] = React.useState(false);
+
+  // start of firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBcbuLJaODarVj-wngx47X3D2vlsiETTdY",
+    authDomain: "notes-app-44.firebaseapp.com",
+    databaseURL: "https://notes-app-44-default-rtdb.firebaseio.com",
+    projectId: "notes-app-44",
+    storageBucket: "notes-app-44.appspot.com",
+    messagingSenderId: "70213484242",
+    appId: "1:70213484242:web:ec0208ffd06279a4ee770b",
+    measurementId: "G-VV2PSYYYFV"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  function signInUser(email, password){
+    const auth = getAuth(app);
+    if(email === '' || password === ''){
+      alert("Please enter email and password");
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("error code:", errorCode);
+      console.log("error message:", errorMessage);
+      alert(errorMessage);
+      setError(true);
+    });
+    if(!isError){
+      navigation.navigate("StudentHome");
+    }
+    
+  }
+  // end of firebase
+
+  const usernameTextHandler = (username) => {
+    setUsername(username);
+  }
+
+  const passwordTextHandler = (password) => {
+    setPassword(password);
+  }
+
+  const printDetails = () => {
+    console.log("Username: "+username+"\n"+"Password:"+password);
+  }
+
+  const beforeNavigation = () => {
+    // printDetails();
+    signInUser(username, password);
+    // navigation.navigate("StudentHome");
+  }
 
   return (
     <View style={styles.studentLogin}>
@@ -14,16 +74,20 @@ const StudentLogin = () => {
         placeholder="Username"
         keyboardType="default"
         placeholderTextColor="#000"
+        value={username}
+        onChangeText={usernameTextHandler}
       />
       <TextInput
         style={[styles.password, styles.usernameLayout]}
         placeholder="Password"
         keyboardType="default"
         placeholderTextColor="#000"
+        value={password}
+        onChangeText={passwordTextHandler}
       />
       <Pressable
         style={[styles.signIn, styles.signInLayout]}
-        onPress={() => navigation.navigate("StudentHome")}
+        onPress={() => beforeNavigation()}
       >
         <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
       </Pressable>
