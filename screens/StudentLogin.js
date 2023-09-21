@@ -3,16 +3,17 @@ import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 // import { initializeApp } from 'firebase/app';
-import {app} from '../components/firebase_config'
+import {app} from '../components/firebase_config';
+// import {notification} from '../components/notification';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+// import notifee from '@notifee/react-native';
 
 const StudentLogin = () => {
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isError, setError] = React.useState(false);
-  const [isStudent, setStudent] = React.useState(false);
 
   // start of firebase
 
@@ -32,6 +33,7 @@ const StudentLogin = () => {
       setError(true);
     });
     if(!isError){
+      // notification();
       navigation.navigate("StudentHome");
     }
     
@@ -78,10 +80,11 @@ const StudentLogin = () => {
       <TextInput
         style={[styles.username, styles.usernameLayout]}
         placeholder="Username"
-        keyboardType="default"
+        keyboardType='email-address'
         placeholderTextColor="#000"
         value={username}
         onChangeText={usernameTextHandler}
+        autoCapitalize="none"
       />
       <TextInput
         style={[styles.password, styles.usernameLayout]}
@@ -90,6 +93,8 @@ const StudentLogin = () => {
         placeholderTextColor="#000"
         value={password}
         onChangeText={passwordTextHandler}
+        autoCapitalize="none"
+        secureTextEntry={true}
       />
       <Pressable
         style={[styles.signIn, styles.signInLayout]}

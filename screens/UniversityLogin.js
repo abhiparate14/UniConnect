@@ -2,10 +2,54 @@ import * as React from "react";
 import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
+import {app} from '../components/firebase_config';
+import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 
 const UniversityLogin = () => {
   const navigation = useNavigation();const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [isError, setError] = React.useState(false);
+
+  // start of firebase
+
+  function signInUser(email, password){
+    const auth = getAuth(app);
+    if(email === '' || password === ''){
+      alert("Please enter email and password");
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("error code:", errorCode);
+      console.log("error message:", errorMessage);
+      alert(errorMessage);
+      setError(true);
+    });
+    if(!isError){
+      // notification();
+      navigation.navigate("UniversityHome");
+    }
+    
+  }
+  // get the data from firebase
+  async function getUserData(username,password){
+    const db = getFirestore(app);
+    const docRef = doc(db, "university", username);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      signInUser(username,password);
+      // alert(`Your name is ${docSnap.data().email}`);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("Invalid User !!!");
+      alert("Invalid User !!!");
+    }
+  }
+  // end of firebase
 
   const usernameTextHandler = (username) => {
     setUsername(username);
@@ -20,8 +64,9 @@ const UniversityLogin = () => {
   }
 
   const beforeNavigation = () => {
-    printDetails();
-    navigation.navigate("UniversityDetails");
+    // printDetails();
+    // navigation.navigate("UniversityDetails");
+    getUserData(username,password);
   }
 
   return (
@@ -30,10 +75,11 @@ const UniversityLogin = () => {
       <TextInput
         style={[styles.username, styles.usernameLayout]}
         placeholder="Username"
-        keyboardType="default"
+        keyboardType='email-address'
         placeholderTextColor="#000"
         value={username}
         onChangeText={usernameTextHandler}
+        autoCapitalize="none"
       />
       <TextInput
         style={[styles.password, styles.usernameLayout]}
@@ -42,6 +88,7 @@ const UniversityLogin = () => {
         placeholderTextColor="#000"
         value={password}
         onChangeText={passwordTextHandler}
+        autoCapitalize="none"
       />
       <Pressable
         style={[styles.signIn, styles.signInLayout]}

@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     width: 60,
     fontFamily: FontFamily.interSemibold,
     fontWeight: "600",
-    textDecoration: "underline",
+    // textDecoration: "underline",
     left: 243,
     lineHeight: 34,
     fontSize: FontSize.size_lg,
