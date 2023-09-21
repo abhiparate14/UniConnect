@@ -2,8 +2,9 @@ import * as React from "react";
 import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
-import { initializeApp } from 'firebase/app';
-// import { getFirestore} from 'firebase/firestore';
+// import { initializeApp } from 'firebase/app';
+import {app} from '../components/firebase_config'
+import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 
 const StudentLogin = () => {
@@ -11,21 +12,10 @@ const StudentLogin = () => {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isError, setError] = React.useState(false);
+  const [isStudent, setStudent] = React.useState(false);
 
   // start of firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyBcbuLJaODarVj-wngx47X3D2vlsiETTdY",
-    authDomain: "notes-app-44.firebaseapp.com",
-    databaseURL: "https://notes-app-44-default-rtdb.firebaseio.com",
-    projectId: "notes-app-44",
-    storageBucket: "notes-app-44.appspot.com",
-    messagingSenderId: "70213484242",
-    appId: "1:70213484242:web:ec0208ffd06279a4ee770b",
-    measurementId: "G-VV2PSYYYFV"
-  };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
   function signInUser(email, password){
     const auth = getAuth(app);
     if(email === '' || password === ''){
@@ -46,6 +36,21 @@ const StudentLogin = () => {
     }
     
   }
+  // get the data from firebase
+  async function getUserData(username,password){
+    const db = getFirestore(app);
+    const docRef = doc(db, "student", username);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      signInUser(username,password);
+      // alert(`Your name is ${docSnap.data().email}`);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("Invalid User !!!");
+      alert("Invalid User !!!");
+    }
+  }
   // end of firebase
 
   const usernameTextHandler = (username) => {
@@ -62,7 +67,8 @@ const StudentLogin = () => {
 
   const beforeNavigation = () => {
     // printDetails();
-    signInUser(username, password);
+    // signInUser(username, password);
+    getUserData(username,password);
     // navigation.navigate("StudentHome");
   }
 

@@ -4,7 +4,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { initializeApp } from 'firebase/app';
+// import { initializeApp } from 'firebase/app';
+import {app} from '../components/firebase_config' 
 import { getFirestore, setDoc, doc, getDoc} from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -24,17 +25,19 @@ const RegistrationCommon = () => {
 
 
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBcbuLJaODarVj-wngx47X3D2vlsiETTdY",
-    authDomain: "notes-app-44.firebaseapp.com",
-    projectId: "notes-app-44",
-    storageBucket: "notes-app-44.appspot.com",
-    messagingSenderId: "70213484242",
-    appId: "1:70213484242:web:ec0208ffd06279a4ee770b",
-    measurementId: "G-VV2PSYYYFV"
-  };
+  // const firebaseConfig = {
+  //   apiKey: "AIzaSyBcbuLJaODarVj-wngx47X3D2vlsiETTdY",
+  //   authDomain: "notes-app-44.firebaseapp.com",
+  //   projectId: "notes-app-44",
+  //   storageBucket: "notes-app-44.appspot.com",
+  //   messagingSenderId: "70213484242",
+  //   appId: "1:70213484242:web:ec0208ffd06279a4ee770b",
+  //   measurementId: "G-VV2PSYYYFV"
+  // };
 
-  const app = initializeApp(firebaseConfig);
+  // const app = initializeApp(firebaseConfig);
+
+
 
   //STARTFIREBASE-AUTH
   function createNewUser(email, password){
@@ -62,12 +65,12 @@ const RegistrationCommon = () => {
     async function sendData() {
       
       const firebase= getFirestore(app);
-      const nowId = usernameText;
+      const nowId = emailtext;
 
 
       await setDoc(doc(firebase, valueDropDown, nowId), {
 
-        id: Math.random().toString(),
+        // id: Math.random().toString(),
         // actualData: dataforfirebase,
         username: usernameText,
         email: emailtext,
