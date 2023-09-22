@@ -24,6 +24,7 @@ import StLdCollege from "./screens/StLdCollege";
 import StGanpatUniversity from "./screens/StGanpatUniversity";
 import StudentSearchResult from "./screens/StudentSearchResult";
 import StudentProfile from "./screens/StudentProfile";
+import StudentProfileEdit from "./screens/StudentProfileEdit";
 import StudentChat from "./screens/StudentChat";
 import StudentSearch from "./screens/StudentSearch";
 import StudentHome from "./screens/StudentHome";
@@ -216,6 +217,11 @@ const App = () => {
                 <Stack.Screen
                   name="StudentHome"
                   component={StudentHome}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="StudentProfileEdit"
+                  component={StudentProfileEdit}
                   options={{ headerShown: false }}
                 />
               </Stack.Navigator>

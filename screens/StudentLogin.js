@@ -4,16 +4,14 @@ import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 // import { initializeApp } from 'firebase/app';
 import {app} from '../components/firebase_config';
-// import {notification} from '../components/notification';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
-// import notifee from '@notifee/react-native';
 
 const StudentLogin = () => {
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [isError, setError] = React.useState(false);
+  // const [isError, setError] = React.useState(false);
 
   // start of firebase
 
@@ -24,20 +22,19 @@ const StudentLogin = () => {
       return;
     }
     signInWithEmailAndPassword(auth, email, password)
+    .then(()=>{
+      navigation.navigate("StudentHome", {id: username});
+    })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log("error code:", errorCode);
       console.log("error message:", errorMessage);
       alert(errorMessage);
-      setError(true);
     });
-    if(!isError){
-      // notification();
-      navigation.navigate("StudentHome");
-    }
     
   }
+
   // get the data from firebase
   async function getUserData(username,password){
     const db = getFirestore(app);
@@ -46,6 +43,7 @@ const StudentLogin = () => {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       signInUser(username,password);
+      
       // alert(`Your name is ${docSnap.data().email}`);
     } else {
       // doc.data() will be undefined in this case

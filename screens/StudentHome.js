@@ -5,9 +5,36 @@ import ExploreContainer from "../components/ExploreContainer";
 import ExploreCard from "../components/ExploreCard";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border } from "../GlobalStyles";
+import {app} from '../components/firebase_config';
+import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
+import { confirmButtonStyles } from "react-native-modal-datetime-picker";
 
-const StudentHome = () => {
+
+const StudentHome = (p) => {
   const navigation = useNavigation();
+  const id=p.route.params.id;
+  // alert(id);
+  //start of firebase
+  const [username, setUsername] = React.useState('');
+  // console.log(id);
+  
+  getUserData();
+  async function getUserData(){
+    const db = getFirestore(app);
+    const docRef = doc(db, "student", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      setUsername(docSnap.data().username);
+      // alert(`Your name is ${docSnap.data().email}`);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("Invalid User !!!");
+      alert("Invalid User !!!");
+    }
+  }
+  //end of firebase
+
 
   return (
     <View style={styles.studentHome}>
@@ -39,7 +66,7 @@ const StudentHome = () => {
       </ScrollView>
       <View style={styles.welcomeText}>
         <Text style={[styles.welcome, styles.userFlexBox]}>WELCOME !</Text>
-        <Text style={[styles.user, styles.userFlexBox]}>{`{user}`}</Text>
+        <Text style={[styles.user, styles.userFlexBox]}>{username}</Text>
       </View>
       <Image
         style={[styles.icons, styles.iconsLayout]}

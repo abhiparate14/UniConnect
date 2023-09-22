@@ -1,9 +1,28 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
-import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 
 const InstructerExtraInfo = () => {
+  const [option1Open, setOption1Open] = useState(false);
+  const [option1Items, setOption1Items] = useState([
+    { value: "university1", label: "university1" },
+    { value: "university2", label: "university2" },
+    { value: "university3", label: "university3" },
+  ]);
+  const [option2Open, setOption2Open] = useState(false);
+  const [option2Items, setOption2Items] = useState([
+    { value: "university1", label: "university1" },
+    { value: "university2", label: "university2" },
+    { value: "university3", label: "university3" },
+  ]);
   const navigation = useNavigation();
 
   return (
@@ -13,20 +32,46 @@ const InstructerExtraInfo = () => {
       <Text style={[styles.moreInfomatonAbout, styles.nextTypo]}>
         More Infomaton about intructer
       </Text>
-      <Pressable
-        style={styles.instructerExtraInfoItem}
+      <TouchableOpacity
+        style={styles.nextButton}
+        activeOpacity={0.2}
         onPress={() => navigation.navigate("InsructerHome")}
-      />
-      <Text style={[styles.next, styles.nextTypo]}>Next</Text>
+      >
+        <Pressable
+          style={styles.nextButtonChild}
+          onPress={() => navigation.navigate("InsructerHome")}
+        />
+        <Text style={[styles.next, styles.nextTypo]}>Next</Text>
+      </TouchableOpacity>
       <Text style={[styles.selectOnly2, styles.nextTypo]}>
         Select Only 2 University
       </Text>
       <View
-        style={[styles.instructerExtraInfoInner, styles.rectangleViewLayout]}
-      />
-      <View style={[styles.rectangleView, styles.rectangleViewLayout]} />
-      <Text style={[styles.option1, styles.optionTypo]}>Option 1</Text>
-      <Text style={[styles.option2, styles.optionTypo]}>Option 2</Text>
+        style={[styles.option1, styles.optionLayout]}
+        placeholder="Option 1"
+      >
+        <DropDownPicker
+          style={styles.dropdownpicker}
+          open={option1Open}
+          setOpen={setOption1Open}
+          items={option1Items}
+          labelStyle={styles.option1Value}
+          dropDownContainerStyle={styles.option1dropDownContainer}
+        />
+      </View>
+      <View
+        style={[styles.option2, styles.optionLayout]}
+        placeholder="Option 2"
+      >
+        <DropDownPicker
+          style={styles.dropdownpicker}
+          open={option2Open}
+          setOpen={setOption2Open}
+          items={option2Items}
+          labelStyle={styles.option2Value}
+          dropDownContainerStyle={styles.option2dropDownContainer}
+        />
+      </View>
       <Text style={styles.beInstructerOf}>
         Be Instructer of this 2 University
       </Text>
@@ -35,6 +80,22 @@ const InstructerExtraInfo = () => {
 };
 
 const styles = StyleSheet.create({
+  option1Value: {
+    color: "#000",
+    fontSize: 20,
+    fontFamily: "Inter-Regular",
+  },
+  option1dropDownContainer: {
+    backgroundColor: "#dae5d0",
+  },
+  option2Value: {
+    color: "#000",
+    fontSize: 20,
+    fontFamily: "Inter-Regular",
+  },
+  option2dropDownContainer: {
+    backgroundColor: "#dae5d0",
+  },
   nextTypo: {
     textAlign: "left",
     color: Color.black,
@@ -42,23 +103,15 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xl,
     position: "absolute",
   },
-  rectangleViewLayout: {
+  optionLayout: {
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingVertical: 0,
+    paddingHorizontal: Padding.p_10xs,
     height: 41,
     width: 201,
-    backgroundColor: Color.beige,
     left: 76,
     borderRadius: Border.br_3xs,
-    position: "absolute",
-  },
-  optionTypo: {
-    opacity: 0.6,
-    height: 19,
-    width: 132,
-    left: 142,
-    textAlign: "left",
-    color: Color.black,
-    fontFamily: FontFamily.interRegular,
-    fontSize: FontSize.size_xl,
     position: "absolute",
   },
   instructerExtraInfoChild: {
@@ -82,20 +135,27 @@ const styles = StyleSheet.create({
     width: 163,
     height: 34,
   },
-  instructerExtraInfoItem: {
-    top: 710,
-    left: 247,
+  nextButtonChild: {
+    top: 0,
+    left: 0,
     backgroundColor: Color.silver,
-    width: 98,
-    height: 40,
     borderRadius: Border.br_3xs,
+    height: 40,
+    width: 98,
     position: "absolute",
   },
   next: {
-    top: 717,
-    left: 277,
+    top: 7,
+    left: 30,
     width: 63,
     height: 13,
+  },
+  nextButton: {
+    top: 710,
+    left: 247,
+    height: 40,
+    width: 98,
+    position: "absolute",
   },
   selectOnly2: {
     top: 249,
@@ -103,17 +163,14 @@ const styles = StyleSheet.create({
     width: 239,
     height: 30,
   },
-  instructerExtraInfoInner: {
-    top: 325,
-  },
-  rectangleView: {
-    top: 414,
+  dropdownpicker: {
+    backgroundColor: Color.beige,
   },
   option1: {
-    top: 336,
+    top: 325,
   },
   option2: {
-    top: 425,
+    top: 414,
   },
   beInstructerOf: {
     top: 522,

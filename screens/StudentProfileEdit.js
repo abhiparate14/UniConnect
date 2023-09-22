@@ -4,18 +4,19 @@ import {
   StyleSheet,
   View,
   ImageBackground,
+  TextInput,
   Text,
   TouchableOpacity,
 } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 
-const StudentProfile = () => {
+const StudentProfileEdit = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.studentProfile}>
+    <View style={styles.studentProfileEdit}>
       <View style={styles.studentNavigationBar}>
         <Pressable
           style={[styles.studentNavigationBarChild, styles.studentLayout]}
@@ -93,17 +94,26 @@ const StudentProfile = () => {
           contentFit="cover"
           source={require("../assets/icoutlineemail.png")}
         />
-        <Text style={[styles.email1, styles.age1Typo]}>email</Text>
+        <TextInput
+          style={[styles.email1, styles.email1Typo]}
+          placeholder="email"
+          autoCapitalize="none"
+          placeholderTextColor="#454545"
+        />
       </View>
       <View style={[styles.dob, styles.dobFlexBox]}>
         <Image
           style={styles.icoutlineEmailIcon}
           contentFit="cover"
-          source={require("../assets/fluentcalendardate28filled.png")}
+          source={require("../assets/fluentcalendardate28filled1.png")}
         />
-        <Text style={[styles.dateOfBirth, styles.sevenKayTypo]}>
-          Date of Birth
-        </Text>
+        <TextInput
+          style={[styles.dateOfBirth, styles.email1Typo]}
+          placeholder="Date of Birth"
+          keyboardType="default"
+          autoCapitalize="none"
+          placeholderTextColor="#454545"
+        />
       </View>
       <View style={[styles.age, styles.dobFlexBox]}>
         <Image
@@ -111,33 +121,31 @@ const StudentProfile = () => {
           contentFit="cover"
           source={require("../assets/gameiconsages.png")}
         />
-        <Text style={[styles.age1, styles.age1Typo]}>Age</Text>
+        <TextInput
+          style={[styles.email1, styles.email1Typo]}
+          placeholder="Age"
+          autoCapitalize="none"
+          placeholderTextColor="#454545"
+        />
       </View>
-      <Text style={[styles.sevenKay, styles.sevenKayTypo]}>Seven Kay</Text>
+      <Text style={[styles.sevenKay, styles.saveTypo]}>Seven Kay</Text>
       <TouchableOpacity
-        style={[styles.logout, styles.editBg]}
+        style={styles.edit}
         activeOpacity={0.2}
-        onPress={() => navigation.navigate("StudentLogin")}
+        onPress={() => navigation.navigate("StudentProfile")}
       >
         <Image
-          style={[styles.majesticonslogoutHalfCircle, styles.uileditIconLayout]}
+          style={styles.mingcutesaveFillIcon}
           contentFit="cover"
-          source={require("../assets/majesticonslogouthalfcircleline.png")}
+          source={require("../assets/mingcutesavefill.png")}
         />
-        <Text style={[styles.logOut, styles.edit1Typo]}>log out</Text>
+        <Text style={[styles.save, styles.saveTypo]}>save</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.edit, styles.editBg]}
-        activeOpacity={0.2}
-        onPress={() => navigation.navigate("StudentProfileEdit")}
-      >
-        <Image
-          style={[styles.uileditIcon, styles.uileditIconLayout]}
-          contentFit="cover"
-          source={require("../assets/uiledit.png")}
-        />
-        <Text style={[styles.edit1, styles.edit1Typo]}>Edit</Text>
-      </TouchableOpacity>
+      <Image
+        style={styles.mingcutesaveFillIcon1}
+        contentFit="cover"
+        source={require("../assets/mingcutesavefill1.png")}
+      />
     </View>
   );
 };
@@ -165,44 +173,25 @@ const styles = StyleSheet.create({
   dobFlexBox: {
     alignItems: "center",
     width: 250,
-  },
-  age1Typo: {
-    marginLeft: 45,
-    width: 165,
-    textAlign: "left",
-    color: Color.colorDarkslategray,
-    fontFamily: FontFamily.latoBold,
-    fontWeight: "700",
-    textTransform: "capitalize",
-    fontSize: FontSize.size_xl,
-  },
-  sevenKayTypo: {
-    textAlign: "left",
-    fontFamily: FontFamily.latoBold,
-    fontWeight: "700",
-    textTransform: "capitalize",
-  },
-  editBg: {
-    backgroundColor: Color.silver,
-    borderRadius: Border.br_mini,
     flexDirection: "row",
+    height: 40,
     position: "absolute",
   },
-  uileditIconLayout: {
-    height: 32,
-    overflow: "hidden",
-  },
-  edit1Typo: {
-    fontFamily: FontFamily.interBold,
-    fontSize: FontSize.size_5xl,
-    textAlign: "left",
-    color: Color.colorDarkslategray,
+  email1Typo: {
+    fontSize: FontSize.size_xl,
     fontWeight: "700",
+    fontFamily: FontFamily.latoBold,
+  },
+  saveTypo: {
+    textAlign: "left",
     textTransform: "capitalize",
+    fontWeight: "700",
   },
   studentNavigationBarChild: {
     height: 40,
     left: 17,
+    backgroundColor: Color.gainsboro,
+    top: 5,
   },
   studentNavigationBarItem: {
     left: 91,
@@ -218,6 +207,7 @@ const styles = StyleSheet.create({
   },
   rectangleView: {
     borderRadius: Border.br_6xl,
+    overflow: "hidden",
     backgroundColor: Color.beige,
     left: "0%",
     bottom: "0%",
@@ -303,48 +293,24 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   email1: {
-    height: 27,
+    marginLeft: 45,
   },
   email: {
     top: 248,
-    flexDirection: "row",
-    alignItems: "center",
-    width: 250,
-    height: 40,
-    position: "absolute",
     left: 24,
+    width: 250,
   },
   dateOfBirth: {
-    width: 169,
-    height: 29,
     marginLeft: 41,
-    color: Color.colorDarkslategray,
-    fontSize: FontSize.size_xl,
-    textAlign: "left",
-    fontFamily: FontFamily.latoBold,
-    fontWeight: "700",
-    textTransform: "capitalize",
   },
   dob: {
     top: 408,
     left: 28,
-    flexDirection: "row",
-    alignItems: "center",
-    width: 250,
-    height: 40,
-    position: "absolute",
-  },
-  age1: {
-    height: 28,
   },
   age: {
     top: 328,
-    flexDirection: "row",
-    alignItems: "center",
-    width: 250,
-    height: 40,
-    position: "absolute",
     left: 24,
+    width: 250,
   },
   sevenKay: {
     top: 135,
@@ -359,41 +325,41 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     position: "absolute",
   },
-  majesticonslogoutHalfCircle: {
-    width: 40,
+  mingcutesaveFillIcon: {
+    width: 30,
+    height: 30,
+    overflow: "hidden",
   },
-  logOut: {
-    width: 105,
-    height: 35,
-    marginLeft: 22,
-  },
-  logout: {
-    top: 597,
-    left: 49,
-    height: 60,
-    paddingHorizontal: 38,
-    paddingVertical: Padding.p_sm,
-    alignItems: "center",
-    width: 250,
-    borderRadius: Border.br_mini,
-  },
-  uileditIcon: {
-    width: 32,
-  },
-  edit1: {
-    width: 95,
-    height: 35,
+  save: {
+    fontSize: FontSize.size_5xl,
+    fontFamily: FontFamily.interBold,
+    color: Color.colorDarkslategray,
+    width: 94,
+    height: 32,
     marginLeft: 26,
   },
   edit: {
-    top: 498,
-    left: 79,
+    top: 587,
+    left: 88,
+    borderRadius: Border.br_mini,
+    overflow: "hidden",
+    backgroundColor: Color.silver,
     width: 191,
     paddingHorizontal: 6,
     paddingVertical: Padding.p_4xs,
+    flexDirection: "row",
     height: 50,
+    position: "absolute",
   },
-  studentProfile: {
+  mingcutesaveFillIcon1: {
+    top: 488,
+    left: 199,
+    width: 24,
+    height: 24,
+    position: "absolute",
+    overflow: "hidden",
+  },
+  studentProfileEdit: {
     backgroundColor: Color.ivory,
     flex: 1,
     height: 800,
@@ -402,4 +368,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StudentProfile;
+export default StudentProfileEdit;
