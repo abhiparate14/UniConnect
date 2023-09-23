@@ -10,9 +10,39 @@ import {
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import {app} from '../components/firebase_config';
+import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 
-const StudentProfile = () => {
+
+const StudentProfile = (p) => {
   const navigation = useNavigation();
+  const id=p.route.params.id;
+  const [ username, setUsername ] = React.useState('Email');
+  const [ age, setAge ] = React.useState('Age');
+  const [ dob, setDob ] = React.useState('Date of Birth');
+
+  //firebase code to retrive information starts
+  getUserData();
+  async function getUserData(){
+    const db = getFirestore(app);
+    const docRef = doc(db, "student", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      setUsername(docSnap.data().username);
+      setAge(docSnap.data().age);
+      setDob(docSnap.data().dob);
+      // alert(`Your name is ${docSnap.data().email}`);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("Invalid User !!!");
+      alert("Invalid User !!!");
+    }
+  }
+// firebase code ends
+
+getUserData();
+//firebase code to retrive information ends
 
   return (
     <View style={styles.studentProfile}>
@@ -93,7 +123,7 @@ const StudentProfile = () => {
           contentFit="cover"
           source={require("../assets/icoutlineemail.png")}
         />
-        <Text style={[styles.email1, styles.age1Typo]}>email</Text>
+        <Text style={[styles.email1, styles.age1Typo]}>{id}</Text>
       </View>
       <View style={[styles.dob, styles.dobFlexBox]}>
         <Image
@@ -102,7 +132,7 @@ const StudentProfile = () => {
           source={require("../assets/fluentcalendardate28filled.png")}
         />
         <Text style={[styles.dateOfBirth, styles.sevenKayTypo]}>
-          Date of Birth
+          {dob}
         </Text>
       </View>
       <View style={[styles.age, styles.dobFlexBox]}>
@@ -111,9 +141,9 @@ const StudentProfile = () => {
           contentFit="cover"
           source={require("../assets/gameiconsages.png")}
         />
-        <Text style={[styles.age1, styles.age1Typo]}>Age</Text>
+        <Text style={[styles.age1, styles.age1Typo]}>{age}</Text>
       </View>
-      <Text style={[styles.sevenKay, styles.sevenKayTypo]}>Seven Kay</Text>
+      <Text style={[styles.sevenKay, styles.sevenKayTypo]}>{username}</Text>
       <TouchableOpacity
         style={[styles.logout, styles.editBg]}
         activeOpacity={0.2}

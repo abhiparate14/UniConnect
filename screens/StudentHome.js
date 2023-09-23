@@ -80,15 +80,15 @@ const StudentHome = (p) => {
         />
         <Pressable
           style={[styles.studentNavigationBarItem, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentSearch")}
+          onPress={() => navigation.navigate("StudentSearch", {id: id})}
         />
         <Pressable
           style={[styles.studentNavigationBarInner, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentChat")}
+          onPress={() => navigation.navigate("StudentChat", {id: id})}
         />
         <Pressable
           style={[styles.rectanglePressable, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentProfile")}
+          onPress={() => navigation.navigate("StudentProfile", {id: id})}
         />
         <View style={styles.rectangleView} />
         <Image
@@ -129,7 +129,7 @@ const StudentHome = (p) => {
           </Pressable>
           <Pressable
             style={[styles.iconamoonprofileFill, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentProfile")}
+            onPress={() => navigation.navigate("StudentProfile", {id: id})}
           >
             <Image
               style={[styles.icon1, styles.iconLayout]}

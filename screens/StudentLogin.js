@@ -5,18 +5,18 @@ import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 // import { initializeApp } from 'firebase/app';
 import {app} from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
 
 const StudentLogin = () => {
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const auth = getAuth(app);
   // const [isError, setError] = React.useState(false);
 
   // start of firebase
 
   function signInUser(email, password){
-    const auth = getAuth(app);
     if(email === '' || password === ''){
       alert("Please enter email and password");
       return;
@@ -72,6 +72,21 @@ const StudentLogin = () => {
     // navigation.navigate("StudentHome");
   }
 
+  function forgetPassword() {
+    console.log("inside forgot password");
+    sendPasswordResetEmail(auth, username)
+    .then(() => {
+      // Password reset email sent!
+      alert("Password Reset Mail Sent !!");
+      // ..
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      console.log(errorMessage = error.message);
+      console.log(errorCode);
+    });
+  }
+
   return (
     <View style={styles.studentLogin}>
       <View style={[styles.studentLoginChild, styles.signInLayout]} />
@@ -101,17 +116,60 @@ const StudentLogin = () => {
         <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
       </Pressable>
       <Text style={[styles.student, styles.signIn1Clr]}>STUDENT</Text>
-      <Text style={[styles.forgotPassword, styles.signIn1Typo]}>
+
+      <Pressable
+        style={[styles.forgetPasswordBox]}
+        onPress={() => forgetPassword()}
+      >
+        <Text style={[styles.forgotPassword, styles.signIn1Typo]}>
+          Forgot Password
+        </Text>
+      </Pressable>
+      {/* <Text style={[styles.forgotPassword, styles.signIn1Typo]}>
         Forgot Password
-      </Text>
+      </Text> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  forgetPasswordBox: {
+    borderRadius: Border.br_xl,
+    position: "relative",
+    top: 700,
+    left: 71,
+    zIndex: 1,
+    backgroundColor: Color.beige,
+    width: 218,
+    height: 51,
+    paddingHorizontal: Padding.p_57xl,
+    paddingVertical: Padding.p_smi,
+    justifyContent: "flex-end",
+  },
+  forgotPassword: {
+    top: 0,
+    left: -40,
+    textDecorationLine: "underline",
+    color: Color.red,
+    height: 27,
+    width: 160,
+    textAlign: "left",
+    // position: "relative",
+    zIndex: 2,
+  },
   signInLayout: {
     borderRadius: Border.br_xl,
     position: "absolute",
+  },
+  signIn: {
+    top: 435,
+    left: 71,
+    backgroundColor: Color.silver,
+    width: 218,
+    height: 51,
+    paddingHorizontal: Padding.p_57xl,
+    paddingVertical: Padding.p_smi,
+    justifyContent: "flex-end",
   },
   usernameLayout: {
     fontSize: FontSize.size_lg,
@@ -128,6 +186,11 @@ const styles = StyleSheet.create({
   signIn1Clr: {
     color: Color.black,
     textAlign: "left",
+  },
+  signIn1: {
+    textAlign: "left",
+    fontSize: FontSize.size_xl,
+    fontFamily: FontFamily.interRegular,
   },
   signIn1Typo: {
     fontSize: FontSize.size_xl,
@@ -146,21 +209,6 @@ const styles = StyleSheet.create({
   password: {
     top: 337,
   },
-  signIn1: {
-    textAlign: "left",
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
-  },
-  signIn: {
-    top: 435,
-    left: 71,
-    backgroundColor: Color.silver,
-    width: 218,
-    height: 51,
-    paddingHorizontal: Padding.p_57xl,
-    paddingVertical: Padding.p_smi,
-    justifyContent: "flex-end",
-  },
   student: {
     top: 98,
     left: 122,
@@ -170,15 +218,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     position: "absolute",
   },
-  forgotPassword: {
-    top: 704,
-    left: 95,
-    textDecorationLine: "underline",
-    color: Color.red,
-    width: 160,
-    textAlign: "left",
-    position: "absolute",
-  },
+  
   studentLogin: {
     backgroundColor: Color.ivory,
     flex: 1,
