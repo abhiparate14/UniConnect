@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  Pressable,
-  StyleSheet,
-  View,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import {  Pressable,  StyleSheet,  View,  ImageBackground,  Text,  TouchableOpacity,} from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
@@ -159,7 +152,7 @@ getUserData();
       <TouchableOpacity
         style={[styles.edit, styles.editBg]}
         activeOpacity={0.2}
-        onPress={() => navigation.navigate("StudentProfileEdit")}
+        onPress={() => navigation.navigate("StudentProfileEdit", {id: id})}
       >
         <Image
           style={[styles.uileditIcon, styles.uileditIconLayout]}
@@ -204,7 +197,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.latoBold,
     fontWeight: "700",
     textTransform: "capitalize",
-    fontSize: FontSize.size_xl,
+    fontSize: 18,
   },
   sevenKayTypo: {
     textAlign: "left",

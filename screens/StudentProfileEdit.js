@@ -1,19 +1,80 @@
 import * as React from "react";
-import {
-  Pressable,
-  StyleSheet,
-  View,
-  ImageBackground,
-  TextInput,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import {  Pressable,  StyleSheet,  View,  ImageBackground,  TextInput,  Text,  TouchableOpacity,} from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
+import {app} from '../components/firebase_config';
+import { getFirestore, getDoc, doc,updateDoc ,collection} from 'firebase/firestore';
 
-const StudentProfileEdit = () => {
+const StudentProfileEdit = (p) => {
   const navigation = useNavigation();
+  const id=p.route.params.id;
+  const [ username, setUsername ] = React.useState('Email');
+  const [ age, setAge ] = React.useState('Age');
+  const [ dob, setDob ] = React.useState('Date of Birth');
+  const db = getFirestore(app);
+
+  const usernameTextHandler = (username) => {
+    if (username != ''){
+      setUsername(username);
+    }
+  };
+
+  const ageTextHandler = (age) => {
+    if (!isNaN(+age)) {
+      setAge(age);
+    }
+  }
+
+  const dobHandler = (date) => {
+    setDob(age);
+  }
+
+    //firebase code to retrive information starts
+    React.useEffect(
+      () => {
+        async function getUserData(){
+          const docRef = doc(db, "student", id);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            setUsername(docSnap.data().username);
+            setAge(docSnap.data().age);
+            setDob(docSnap.data().dob);
+            // alert(`Your name is ${docSnap.data().email}`);
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("Invalid User !!!");
+            alert("Invalid User !!!");
+          }
+        }
+        getUserData();
+      },[])
+  // firebase code ends
+  
+  // getUserData();
+  //firebase code to retrive information ends
+
+  //send data to firebase starts
+
+  async function updateData(){
+    const docRef = doc(db, "student", id);
+    console.log("id:",id);
+  await updateDoc(docRef, {
+    "age": age,
+    "username": username,
+    "dob": dob,
+  });
+  }
+
+
+  //send data to firabase ends
+
+  const beforeNavigation = () => {
+    updateData();
+    console.log("hi");
+    navigation.navigate("StudentProfile",{id: id});
+  }
 
   return (
     <View style={styles.studentProfileEdit}>
@@ -97,6 +158,7 @@ const StudentProfileEdit = () => {
         <TextInput
           style={[styles.email1, styles.email1Typo]}
           placeholder="email"
+          value={id}
           autoCapitalize="none"
           placeholderTextColor="#454545"
         />
@@ -110,6 +172,8 @@ const StudentProfileEdit = () => {
         <TextInput
           style={[styles.dateOfBirth, styles.email1Typo]}
           placeholder="Date of Birth"
+          value={dob}
+          onChangeText={dobHandler}
           keyboardType="default"
           autoCapitalize="none"
           placeholderTextColor="#454545"
@@ -124,15 +188,25 @@ const StudentProfileEdit = () => {
         <TextInput
           style={[styles.email1, styles.email1Typo]}
           placeholder="Age"
+          value={age}
+          onChangeText={ageTextHandler}
           autoCapitalize="none"
           placeholderTextColor="#454545"
         />
       </View>
-      <Text style={[styles.sevenKay, styles.saveTypo]}>Seven Kay</Text>
+      {/* <Text style={[styles.sevenKay, styles.saveTypo]}>{username}</Text> */}
+      <TextInput
+        style={[styles.sevenKay, styles.saveTypo]}
+        placeholder="Username"
+        value={username}
+        onChangeText={usernameTextHandler}
+        autoCapitalize="none"
+        placeholderTextColor="#454545"
+      />
       <TouchableOpacity
         style={styles.edit}
         activeOpacity={0.2}
-        onPress={() => navigation.navigate("StudentProfile")}
+        onPress={() => beforeNavigation()}
       >
         <Image
           style={styles.mingcutesaveFillIcon}
@@ -178,7 +252,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   email1Typo: {
-    fontSize: FontSize.size_xl,
+    fontSize: 18,
     fontWeight: "700",
     fontFamily: FontFamily.latoBold,
   },
