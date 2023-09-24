@@ -78,6 +78,7 @@ const RegistrationCommon = () => {
         password: passwordtext,
         dob: selectedDate,
         type: valueDropDown,
+        photo: "gs://notes-app-44.appspot.com/stock_image.png"
 
       });
 

@@ -1,10 +1,25 @@
 import * as React from "react";
-import {  Pressable,  StyleSheet,  View,  ImageBackground,  TextInput,  Text,  TouchableOpacity,} from "react-native";
+import {  
+  Pressable,  
+  StyleSheet,  
+  View,  
+  ImageBackground,  
+  TextInput,  
+  Text,  
+  TouchableOpacity, 
+  Permission,
+  PermissionsAndroid,
+} from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import {app} from '../components/firebase_config';
 import { getFirestore, getDoc, doc,updateDoc ,collection} from 'firebase/firestore';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { getStorage, ref ,uploadBytes } from "firebase/storage";
+// import { firebase } from "@react-native-firebase/storage";
 
 const StudentProfileEdit = (p) => {
   const navigation = useNavigation();
@@ -12,6 +27,9 @@ const StudentProfileEdit = (p) => {
   const [ username, setUsername ] = React.useState('Email');
   const [ age, setAge ] = React.useState('Age');
   const [ dob, setDob ] = React.useState('Date of Birth');
+  const [ image, setImage ] = React.useState(null);
+  const [ uploading, setUploading ] = React.useState(false);
+
   const db = getFirestore(app);
 
   const usernameTextHandler = (username) => {
@@ -49,7 +67,7 @@ const StudentProfileEdit = (p) => {
           }
         }
         getUserData();
-      },[])
+      },[]);
   // firebase code ends
   
   // getUserData();
@@ -64,14 +82,71 @@ const StudentProfileEdit = (p) => {
     "age": age,
     "username": username,
     "dob": dob,
+    "photo":"gs://notes-app-44.appspot.com/"+id,
   });
+  }
+  // image change section
+
+  const pickImage = async() => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4,3],
+      quality: 1,
+    });
+    if(!result.canceled) {
+      setImage(result.assets[0].uri);
+      // console.log("image is: " + image);
+    }
+  };
+
+  const uploadMedia = async() => {
+    setUploading(true);
+    
+    try {
+      const { uri } = await FileSystem.getInfoAsync(image);
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+          resolve(xhr.response);
+        };
+        xhr.onerror = (e) => {
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
+      })
+      const filename = id;
+      console.log(filename);
+      const storage = getStorage(app);
+      const photoRef = ref(storage, filename);
+      // await photoRef.put(blob);
+      await uploadBytes(photoRef, blob).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+      });
+      setUploading(false);
+      alert('Photo Uploaded!!!');
+      setImage(null);
+
+    } catch(error) {
+      console.error(error);
+      setUploading(false);
+    }
+  }
+
+
+  const test = () => {
+    console.log("Test pass !!!");
+    pickImage();
   }
 
 
   //send data to firabase ends
 
-  const beforeNavigation = () => {
-    updateData();
+  const beforeNavigation = async() => {
+    await updateData();
+    await uploadMedia();
     console.log("hi");
     navigation.navigate("StudentProfile",{id: id});
   }
@@ -144,11 +219,23 @@ const StudentProfileEdit = (p) => {
           </Pressable>
         </View>
       </View>
-      <ImageBackground
+      <View>
+        <TouchableOpacity 
+        style={styles.photoBtn}
+        onPress={() => test()}
+        >
+          {image && <Image
+          source={{uri: image}}
+          style={styles.photoIcon}
+          />}
+
+      {/* <ImageBackground
         style={styles.photoIcon}
         resizeMode="cover"
         source={require("../assets/stock_image.png")}
-      />
+      /> */}
+        </TouchableOpacity>
+      </View>
       <View style={[styles.email, styles.dobFlexBox]}>
         <Image
           style={styles.icoutlineEmailIcon}
@@ -352,14 +439,24 @@ const styles = StyleSheet.create({
     left: 17,
     position: "absolute",
   },
-  photoIcon: {
+  photoBtn: {
     height: 145,
     width: 140,
+    // borderWidth: 1,
     borderRadius: 200/2,
     overflow: "hidden",
     marginTop: 70,
     top: 10,
     left: 20,
+  },
+  photoIcon: {
+    height: 140,
+    width: 140,
+    borderRadius: 200/2,
+    overflow: "hidden",
+    marginTop: 70,
+    top: -68,
+    left: 0,
   },
   icoutlineEmailIcon: {
     width: 40,

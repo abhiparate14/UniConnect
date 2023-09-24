@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import {app} from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
+import { ref ,getStorage,getDownloadURL} from "firebase/storage";
 
 
 const StudentProfile = (p) => {
@@ -13,28 +14,39 @@ const StudentProfile = (p) => {
   const [ username, setUsername ] = React.useState('Email');
   const [ age, setAge ] = React.useState('Age');
   const [ dob, setDob ] = React.useState('Date of Birth');
-
+  const [profilepic,setProfilepic]=React.useState('');
+  const storage = getStorage(app);
+  const gsReference = ref(storage, 'gs://notes-app-44.appspot.com/'+id);
+  
+  getDownloadURL(ref(storage, gsReference))
+  .then((url) => {
+  console.log("Profilepic:" + url);
+  setProfilepic(url)
+  })
   //firebase code to retrive information starts
-  getUserData();
-  async function getUserData(){
-    const db = getFirestore(app);
-    const docRef = doc(db, "student", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      setUsername(docSnap.data().username);
-      setAge(docSnap.data().age);
-      setDob(docSnap.data().dob);
-      // alert(`Your name is ${docSnap.data().email}`);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("Invalid User !!!");
-      alert("Invalid User !!!");
-    }
-  }
+  React.useEffect(
+    () => {
+      async function getUserData(){
+        const db = getFirestore(app);
+        const docRef = doc(db, "student", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          setUsername(docSnap.data().username);
+          setAge(docSnap.data().age);
+          setDob(docSnap.data().dob);
+          setProfilepic(docSnap.data().profilepic);
+          // alert(`Your name is ${docSnap.data().email}`);
+        } 
+        else {
+          // doc.data() will be undefined in this case
+          console.log("Invalid User !!!");
+          alert("Invalid User !!!");
+        }
+      }
+      getUserData();
 // firebase code ends
-
-getUserData();
+},[]);
 //firebase code to retrive information ends
 
   return (
@@ -105,11 +117,10 @@ getUserData();
           </Pressable>
         </View>
       </View>
-      <ImageBackground
-        style={styles.photoIcon}
-        resizeMode="cover"
-        source={require("../assets/stock_image.png")}
-      />
+      { profilepic&&<Image
+          source={{uri: profilepic}}
+          style={styles.photoIcon}
+          />}
       <View style={[styles.email, styles.dobFlexBox]}>
         <Image
           style={styles.icoutlineEmailIcon}
