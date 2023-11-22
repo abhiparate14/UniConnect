@@ -8,6 +8,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {app} from '../components/firebase_config' 
 import { getFirestore, setDoc, doc, getDoc} from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { StatusBar } from "expo-status-bar";
+
 
 const RegistrationCommon = () => {
   const [isDropDownVisible, setDropDownVisible] = useState(false);
@@ -172,6 +174,8 @@ const RegistrationCommon = () => {
 
   return (
     <View style={styles.registrationCommon}>
+      {/* <StatusBar/> */}
+      {/* <topbar/> */}
       <View style={[styles.registrationCommonChild, styles.passwordBtnLayout]} />
       <TextInput
         style={[styles.nameBtn, styles.btnTypo]}
@@ -387,6 +391,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   registrationCommon: {
+    display: 'flex',
     backgroundColor: Color.ivory,
     flex: 1,
     width: "100%",

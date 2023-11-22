@@ -9,118 +9,83 @@ const InstructorContainer = () => {
 
   return (
     <View style={styles.signIn}>
+    <Text style={styles.signInText}>Sign-In As:</Text>
       <Pressable
-        style={[styles.instructor, styles.studentLayout]}
+        style={styles.buttonCover}
         onPress={() => navigation.navigate("InstructorLogin")}
       >
         <Image
-          style={styles.dashiconsadminUsers}
+          style={styles.icon}
           contentFit="cover"
           source={require("../assets/dashiconsadminusers.png")}
         />
-        <Text style={[styles.instructor1, styles.student1Typo]}>
+        <Text style={styles.txt1}>
           Instructor
         </Text>
       </Pressable>
       <Pressable
-        style={styles.university}
+        style={styles.buttonCover}
         onPress={() => navigation.navigate("UniversityLogin")}
       >
         <Image
-          style={styles.launiversityIcon}
+          style={styles.icon}
           contentFit="cover"
           source={require("../assets/launiversity.png")}
         />
-        <Text style={[styles.university1, styles.student1Typo]}>
+        <Text style={styles.txt1}>
           University
         </Text>
       </Pressable>
       <Pressable
-        style={[styles.student, styles.studentLayout]}
+        style={styles.buttonCover}
         onPress={() => navigation.navigate("StudentLogin")}
       >
         <Image
-          style={styles.dashiconsadminUsers}
+          style={styles.icon}
           contentFit="cover"
           source={require("../assets/phstudent.png")}
-        />
-        <Text style={[styles.student1, styles.student1Typo]}>Student</Text>
+          />
+        <Text style={styles.txt1}>Student</Text>
       </Pressable>
-      <Text style={[styles.signInAs, styles.student1Typo]}>Sign-In As:</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  studentLayout: {
-    alignItems: "center",
-    paddingVertical: 0,
-    paddingHorizontal: Padding.p_2xl,
-    flexDirection: "row",
-    height: 60,
-    width: 250,
-    backgroundColor: Color.beige,
-    left: 20,
-    position: "absolute",
+  signIn: {
+    backgroundColor: Color.blanchedalmond_100,
+    width: '80%',
     borderRadius: Border.br_xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20
   },
-  student1Typo: {
-    textAlign: "left",
-    color: Color.black,
-    fontFamily: FontFamily.interRegular,
-    fontSize: FontSize.size_xl,
+  buttonCover: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Color.beige,
+    height: 60,
+    width: '80%',
+    borderRadius: Border.br_xl,
+    marginVertical: 20,
+    paddingHorizontal: Padding.p_2xl,
   },
-  dashiconsadminUsers: {
+  icon: {
     width: 30,
     height: 30,
     overflow: "hidden",
   },
-  instructor1: {
-    marginLeft: 35,
-  },
-  instructor: {
-    top: 53,
-  },
-  launiversityIcon: {
-    width: 32,
-    height: 32,
-    overflow: "hidden",
-  },
-  university1: {
+  txt1: {
     marginLeft: 33,
-  },
-  university: {
-    top: 153,
-    paddingTop: Padding.p_mini,
-    paddingBottom: Padding.p_smi,
-    paddingHorizontal: Padding.p_2xl,
-    flexDirection: "row",
-    height: 60,
-    width: 250,
-    backgroundColor: Color.beige,
-    left: 20,
-    position: "absolute",
-    borderRadius: Border.br_xl,
-  },
-  student1: {
-    marginLeft: 43,
-  },
-  student: {
-    top: 253,
-  },
-  signInAs: {
-    top: 11,
-    left: 44,
-    position: "absolute",
+    textAlign: 'left',
     color: Color.black,
     fontFamily: FontFamily.interRegular,
     fontSize: FontSize.size_xl,
   },
-  signIn: {
-    backgroundColor: Color.blanchedalmond_100,
-    width: 290,
-    height: 344,
-    borderRadius: Border.br_xl,
+  signInText: {
+    color: Color.black,
+    fontFamily: FontFamily.interRegular,
+    fontSize: FontSize.size_xl,
   },
 });
 
