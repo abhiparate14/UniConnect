@@ -5,6 +5,7 @@ import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 import {app} from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { StatusBar } from "expo-status-bar";
 
 const InstructorLogin = () => {
   const navigation = useNavigation();
@@ -71,118 +72,116 @@ const InstructorLogin = () => {
   }
 
   return (
-    <View style={styles.instructorLogin}>
-      <View style={[styles.instructorLoginChild, styles.signInLayout]} />
-      <TextInput
-        style={[styles.username, styles.usernameLayout]}
-        placeholder="Username"
-        keyboardType='email-address'
-        placeholderTextColor="#000"
-        value={username}
-        onChangeText={usernameTextHandler}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={[styles.password, styles.usernameLayout]}
-        placeholder="Password"
-        keyboardType="default"
-        placeholderTextColor="#000"
-        value={password}
-        onChangeText={passwordTextHandler}
-        autoCapitalize="none"
-        secureTextEntry={true}
-      />
+    <View style={styles.studentLogin}>
+      <StatusBar/>
+      <Text style={styles.header}>Instructor</Text>
+      <View style={styles.midddleBox} >
+        <TextInput
+          style={styles.inputbox}
+          placeholder="Username"
+          keyboardType='email-address'
+          placeholderTextColor="#000"
+          value={username}
+          onChangeText={usernameTextHandler}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.inputbox}
+          placeholder="Password"
+          keyboardType="default"
+          placeholderTextColor="#000"
+          value={password}
+          onChangeText={passwordTextHandler}
+          autoCapitalize="none"
+          secureTextEntry={true}
+        />
+        <Pressable
+          style={styles.signIn}
+          onPress={() => beforeNavigation()}
+        >
+          <Text style={styles.signintxt}>Sign In</Text>
+        </Pressable>
+      </View>
+  
       <Pressable
-        style={[styles.signIn, styles.signInLayout]}
-        onPress={() => beforeNavigation()}
+        style={styles.forgetPasswordBox}
       >
-        <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
+        <Text style={styles.forgotPassword}>
+          Forgot Password
+        </Text>
       </Pressable>
-      <Text style={[styles.instructor, styles.signIn1Clr]}>Instructor</Text>
-      <Text style={[styles.forgotPassword, styles.signIn1Typo]}>
-        Forgot Password
-      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  signInLayout: {
-    borderRadius: Border.br_xl,
-    position: "absolute",
+  studentLogin: {
+    backgroundColor: Color.ivory,
+    flex: 1,
+    width: "100%",
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  usernameLayout: {
+  header: {
+    fontSize: FontSize.size_5xl,
+    fontWeight: "700",
+    fontFamily: FontFamily.interBold,
+    textAlign: "left",
+    color: Color.black,
+    textAlign: "left",
+    top: '15%',
+    position: 'absolute'
+  },
+  midddleBox: {
+    backgroundColor: Color.blanchedalmond_100,
+    borderRadius: Border.br_xl,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '85%',
+    paddingVertical: 30,
+    marginVertical: 10,
+  },
+  inputbox: {
     fontSize: FontSize.size_lg,
     fontFamily: FontFamily.interRegular,
     paddingVertical: Padding.p_lg,
     paddingHorizontal: Padding.p_18xl,
     height: 60,
-    width: 250,
+    width: '85%',
     backgroundColor: Color.beige,
-    left: 55,
     borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  signIn1Clr: {
-    color: Color.black,
-    textAlign: "left",
-  },
-  signIn1Typo: {
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
-  },
-  instructorLoginChild: {
-    top: 183,
-    left: 35,
-    backgroundColor: Color.blanchedalmond_100,
-    width: 290,
-    height: 345,
-  },
-  username: {
-    top: 237,
-  },
-  password: {
-    top: 335,
-  },
-  signIn1: {
-    textAlign: "left",
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
+    marginVertical: 10,
   },
   signIn: {
-    top: 433,
-    left: 71,
+    marginTop: 20,
     backgroundColor: Color.silver,
-    width: 218,
-    height: 51,
     paddingHorizontal: Padding.p_57xl,
     paddingVertical: Padding.p_smi,
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    alignItems: 'center',
+    borderRadius: Border.br_xl,
   },
-  instructor: {
-    top: 96,
-    left: 121,
-    fontSize: FontSize.size_5xl,
-    fontWeight: "700",
-    fontFamily: FontFamily.interBold,
+  signintxt: {
     textAlign: "left",
-    position: "absolute",
+    fontSize: FontSize.size_xl,
+    fontFamily: FontFamily.interRegular,
+    color: Color.black,
+    textAlign: "left",
+    fontWeight: 'bold',
+  },
+  forgetPasswordBox: {
+    position: 'absolute',
+    zIndex: 1,
+    justifyContent: "flex-end",
+    top: '90%'
   },
   forgotPassword: {
-    top: 633,
-    left: 100,
     textDecorationLine: "underline",
     color: Color.red,
-    width: 160,
     textAlign: "left",
-    position: "absolute",
-  },
-  instructorLogin: {
-    backgroundColor: Color.ivory,
-    flex: 1,
-    width: "100%",
-    height: 800,
-    overflow: "hidden",
+    zIndex: 2,
+    fontSize: FontSize.size_xl,
   },
 });
 

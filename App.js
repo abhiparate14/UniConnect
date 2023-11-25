@@ -28,6 +28,7 @@ import StudentProfileEdit from "./screens/StudentProfileEdit";
 import StudentChat from "./screens/StudentChat";
 import StudentSearch from "./screens/StudentSearch";
 import StudentHome from "./screens/StudentHome";
+import StudentChatScreen from './screens/StudentChatScreen'
 import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -222,6 +223,11 @@ const App = () => {
                 <Stack.Screen
                   name="StudentProfileEdit"
                   component={StudentProfileEdit}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="StudentChatScreen"
+                  component={StudentChatScreen}
                   options={{ headerShown: false }}
                 />
               </Stack.Navigator>

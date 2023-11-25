@@ -3,85 +3,75 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import app from "../components/firebase_config";
+import { getFirestore ,getDocs ,doc, collection, updateDoc, arrayUnion} from 'firebase/firestore';
 
-const StudentSearch = () => {
+const StudentSearch = (p) => {
   const navigation = useNavigation();
+  const id = p.route.params.id;
+  console.log('id: ' + id)
+  const [instructor, setInstructor] = React.useState([]);
+  // const instructor = [];
+  
+  React.useEffect(() => {
+    async function getUserData() {
+      try {
+        const db = getFirestore(app);
+        const collectionRef = collection(db, "instructor");
+        const querySnapshot = await getDocs(collectionRef);
+        querySnapshot.forEach((doc) => {
+          console.log("Document data:", doc.data());
+          setInstructor(doc.data());
+          // instructor(doc.data());
+        });
+      } catch (error) {
+        console.error("Error getting documents:", error);
+      }
+    }
+    getUserData();
+  }, []);
+  const InstructorEmail = instructor.email;
+  // console.log('my data ' + instructor.username)
+  console.log('instructor data: ' + InstructorEmail);
 
+  const addstudentnameininstructor = async () => {
+    try {
+      const db = getFirestore(app);
+      const docRef = doc(db, "instructor", InstructorEmail);
+      await updateDoc(docRef, {
+        chatwith: arrayUnion(id),
+      });
+      console.log("Document successfully updated!");
+    } catch (error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const addinstructornameinstudent = async () =>{
+    try {
+      const db = getFirestore(app);
+      const docRef = doc(db, "student", id);
+      await updateDoc(docRef, {
+        chatwith: arrayUnion(InstructorEmail),
+      });
+      console.log("Document successfully updated!");
+    } catch (error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+    }
+    
+  }
+
+  const beforeNavigation = () => {
+    addstudentnameininstructor();
+    addinstructornameinstudent();
+    navigation.navigate('StudentChatScreen', {InstructorEmail: InstructorEmail, StudentEmail : id, InstructorName: instructor.username});
+  }
+  
   return (
     <View style={styles.studentSearch}>
-      <Text style={[styles.universities, styles.searchPosition]}>
-        <Text style={styles.instructorsTypo}>Universities</Text>
-        <Text style={[styles.text, styles.textTypo]}>:</Text>
-      </Text>
-      <Text style={[styles.instructors, styles.instructorsTypo]}>
-        Instructors:
-      </Text>
-      <View style={styles.studentNavigationBar}>
-        <Pressable
-          style={[styles.studentNavigationBarChild, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentHome")}
-        />
-        <Pressable
-          style={[styles.studentNavigationBarItem, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentSearch")}
-        />
-        <Pressable
-          style={[styles.studentNavigationBarInner, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentChat")}
-        />
-        <Pressable
-          style={[styles.rectanglePressable, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentProfile")}
-        />
-        <View style={styles.rectangleView} />
-        <Image
-          style={[styles.seperationIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/seperation.png")}
-        />
-        <View style={styles.icons}>
-          <Pressable
-            style={[styles.teenyiconshomeSolid, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentHome")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/teenyiconshomesolid4.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.zondiconssearch, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentSearch")}
-          >
-            <Image
-              style={[styles.icon1, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/zondiconssearch.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.bxschat, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentChat")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/bxschat.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.iconamoonprofileFill, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentProfile")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/iconamoonprofilefill2.png")}
-            />
-          </Pressable>
-        </View>
-      </View>
       <Pressable
         style={styles.searchBar}
         onPress={() => navigation.navigate("StudentSearchResult")}
@@ -96,6 +86,21 @@ const StudentSearch = () => {
         </Text>
       </Pressable>
       <Text style={[styles.search, styles.searchPosition]}>Search</Text>
+      <View style={styles.scroll}>
+        <Text style={styles.instructor}>
+          Instructors:
+        </Text>
+        <TouchableOpacity
+          onPress={() => beforeNavigation()}
+        >
+          <Text style={styles.chikable}>{instructor.username}</Text>
+        </TouchableOpacity>
+        <ScrollView>
+          
+        </ScrollView>
+      </View>
+
+
     </View>
   );
 };
@@ -298,6 +303,30 @@ const styles = StyleSheet.create({
     height: 800,
     width: "100%",
     backgroundColor: Color.ivory,
+  },
+  instructor:{
+    textAlign: "left",
+    color: Color.black,
+    fontSize: FontSize.size_mid,
+  },
+  scroll: {
+    flex: 1,
+    top: 250,
+    left: 1,
+    width: '100%',
+    height: '100%',
+    // backgroundColor: 'black'
+  },
+  name: {
+    color: 'black',
+    fontSize: FontSize.size_mid,
+    backgroundColor: 'blue',
+  },
+  chikable:{
+    color: 'blue',
+    fontSize: 30,
+    backgroundColor: 'red',
+    alignSelf: 'center'
   },
 });
 

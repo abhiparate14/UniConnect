@@ -4,7 +4,6 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-// import { initializeApp } from 'firebase/app';
 import {app} from '../components/firebase_config' 
 import { getFirestore, setDoc, doc, getDoc} from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -22,24 +21,6 @@ const RegistrationCommon = () => {
   const [passwordtext, setPasswordText] = useState('');
   const navigation = useNavigation();
   const [isError, setError] = useState(false);
-
-  // start firebase section
-
-
-
-  // const firebaseConfig = {
-  //   apiKey: "AIzaSyBcbuLJaODarVj-wngx47X3D2vlsiETTdY",
-  //   authDomain: "notes-app-44.firebaseapp.com",
-  //   projectId: "notes-app-44",
-  //   storageBucket: "notes-app-44.appspot.com",
-  //   messagingSenderId: "70213484242",
-  //   appId: "1:70213484242:web:ec0208ffd06279a4ee770b",
-  //   measurementId: "G-VV2PSYYYFV"
-  // };
-
-  // const app = initializeApp(firebaseConfig);
-
-
 
   //STARTFIREBASE-AUTH
   function createNewUser(email, password){
@@ -72,8 +53,6 @@ const RegistrationCommon = () => {
 
       await setDoc(doc(firebase, valueDropDown, nowId), {
 
-        // id: Math.random().toString(),
-        // actualData: dataforfirebase,
         username: usernameText,
         email: emailtext,
         age: agetext,
@@ -83,12 +62,6 @@ const RegistrationCommon = () => {
         photo: "gs://notes-app-44.appspot.com/stock_image.png"
 
       });
-
-      // const myData = await getDoc(doc(firebase, valueDropDown, nowId));
-      // console.log(myData.data());
-      // console.log(myData.data().actualData);
-
-
     }
 
   // end firebase section
@@ -172,13 +145,19 @@ const RegistrationCommon = () => {
     hideDatePicker();
   };
 
+
+// retun components ------------------------------------------------------------------------
+
   return (
     <View style={styles.registrationCommon}>
-      {/* <StatusBar/> */}
+      <StatusBar/>
       {/* <topbar/> */}
-      <View style={[styles.registrationCommonChild, styles.passwordBtnLayout]} />
+      <Text style={[styles.registerAccount, styles.registerFlexBox]}>
+        Register Account
+      </Text>
+      <View style={styles.middleBox} >
       <TextInput
-        style={[styles.nameBtn, styles.btnTypo]}
+        style={styles.butttonBackground}
         placeholder="User Name"
         placeholderTextColor="#000"
         autoCapitalize='none'
@@ -186,7 +165,7 @@ const RegistrationCommon = () => {
         onChangeText={usernameTextHandler}
       />
       <TextInput
-        style={[styles.emailBtn, styles.btnTypo]}
+        style={styles.butttonBackground}
         placeholder="Email"
         placeholderTextColor="#000"
         keyboardType='email-address'
@@ -194,27 +173,25 @@ const RegistrationCommon = () => {
         value={emailtext}
         onChangeText={emailTextHandler}
       />
-      <View style={[styles.btnTypo]}>
+      <View style={styles.butttonBackground}>
         <TouchableOpacity 
         style={[styles.dobBtnDatePickerPlaceHolder]}
         onPress={() => {showDatePicker()}}
         >
-          <Text 
-          style={[styles.dobBtnDatePickerValue]} 
-          >
+          <Text style={styles.dateTxt}>
             {selectedDate}
-            </Text>
-        </TouchableOpacity>
+          </Text>
         <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
-      />
+        />
+        </TouchableOpacity>
       </View>
 
       <TextInput
-        style={[styles.ageBtn, styles.btnSpaceBlock]}
+        style={styles.butttonBackground}
         placeholder="Age"
         placeholderTextColor="#000"
         value={agetext}
@@ -223,7 +200,7 @@ const RegistrationCommon = () => {
         
       />
       <TextInput
-        style={[styles.passwordBtn, styles.btnTypo]}
+        style={styles.butttonBackground}
         placeholder="Password"
         placeholderTextColor="#000"
         autoCapitalize='none'
@@ -231,173 +208,102 @@ const RegistrationCommon = () => {
         onChangeText={passwordTextHandler}
         secureTextEntry={true}
       />
-      <Text style={[styles.registerAccount, styles.registerFlexBox]}>
-        Register Account
-      </Text>
-      <Pressable
-        style={[styles.registerBtn, styles.btnSpaceBlock]}
-        onPress={() => navigatetoanotherpage(valueDropDown)}
-      >
-        <Text style={[styles.register, styles.registerFlexBox]}>Register</Text>
-      </Pressable>
-      <View style={styles.whoIsRegisteringBtn}>
-        <DropDownPicker
-          open={isDropDownVisible}
-          value={valueDropDown}
-          setOpen={() => setDropDownVisible(!isDropDownVisible)}
-          items={whoIsRegisteringOptions}
-          labelStyle={styles.whoIsRegisteringBtnValue}
-          setValue={(value) => setValueDropDown(value)}
-          placeholder="Select Category"
-          dropDownDirection="TOP"
-          disableBorderRadius={true}
-        />
+      <View style={styles.dropdown}>
+        <View style={styles.whoIsRegisteringBtn}>
+          <DropDownPicker
+            open={isDropDownVisible}
+            value={valueDropDown}
+            setOpen={() => setDropDownVisible(!isDropDownVisible)}
+            items={whoIsRegisteringOptions}
+            labelStyle={styles.whoIsRegisteringBtnValue}
+            setValue={(value) => setValueDropDown(value)}
+            placeholder="Select Category"
+            dropDownDirection="TOP"
+            disableBorderRadius={true}
+          />
+        </View>
       </View>
-
+      </View>
+      <View style={styles.registerBtn}>
+      <Pressable
+          onPress={() => navigatetoanotherpage(valueDropDown)}
+        >
+        <Text style={styles.registerTxt}>Register</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  
-  dobBtnDatePickerValue: {
-    left: 0,
-    top: 10,
-    fontFamily: FontFamily.interRegular,
-    fontSize: FontSize.size_lg,
-    paddingHorizontal: Padding.p_17xl,
-  },
-  whoIsRegisteringBtnValue: {
-    color: "#000",
-    fontSize: 20,
-    fontFamily: "Inter_regular",
-    fontSize: FontSize.size_lg,
-    paddingHorizontal: Padding.p_17xl,
-  },
-  passwordBtnLayout: {
-    borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  btnTypo: {
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
-  },
-  btnSpaceBlock: {
-    paddingVertical: Padding.p_2xs,
-    borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  registerFlexBox: {
-    textAlign: "left",
-    color: Color.black,
-  },
-  registrationCommonChild: {
-    top: 194,
-    left: 29,
-    backgroundColor: Color.blanchedalmond_100,
-    width: 290,
-    height: 469,
-  },
-  nameBtn: {
-    top: 218,
+  registrationCommon: {
+    flex: 1,
+    backgroundColor: Color.ivory,
+    width: "100%",
+    height: '100%',
+    overflow: "hidden",
+    alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 0,
-    fontFamily: FontFamily.interRegular,
-    paddingHorizontal: Padding.p_17xl,
-    height: 45,
-    width: 256,
-    backgroundColor: Color.beige,
-    left: 46,
-    borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  emailBtn: {
-    top: 289,
-    justifyContent: "center",
-    paddingVertical: 0,
-    fontFamily: FontFamily.interRegular,
-    paddingHorizontal: Padding.p_17xl,
-    height: 45,
-    width: 256,
-    backgroundColor: Color.beige,
-    left: 46,
-    borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  ageBtn: {
-    top: 363, // Adjusted the top position
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
-    paddingHorizontal: Padding.p_17xl,
-    height: 45,
-    backgroundColor: Color.beige,
-    width: 256,
-    left: 46,
-  },
-  dobBtnDatePickerPlaceHolder: {
-    top: 437,
-    height: 45,
-    width: 256,
-    left: 46,
-    fontFamily: "Inter_regular",
-    backgroundColor: Color.beige,
-    fontSize: 20,
-    borderRadius: Border.br_xl,
-  },
-  passwordBtn: {
-    top: 526,
-    paddingVertical: 5,
-    justifyContent: "flex-end",
-    paddingHorizontal: Padding.p_17xl,
-    height: 45,
-    backgroundColor: Color.beige,
-    fontFamily: FontFamily.interRegular,
-    width: 256,
-    left: 46,
-    borderRadius: Border.br_xl,
-    position: "absolute",
   },
   registerAccount: {
-    top: 109,
-    left: 77,
-    fontSize: FontSize.size_5xl,
+    fontSize: FontSize.size_6xl,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
-    width: 206,
-    height: 41,
-    position: "absolute",
     color: Color.black,
+    marginTop: -50,
+    marginBottom: 100
   },
-  register: {
-    width: 115,
-    height: 20,
-    fontSize: FontSize.size_xl,
+  middleBox: {
+    borderRadius: Border.br_xl,
+    backgroundColor: Color.blanchedalmond_100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    width: '80%'
+  },
+  butttonBackground: {
+    width: '85%',
+    fontSize: 20,
     fontFamily: FontFamily.interRegular,
+    justifyContent: "center",
+    alignItems: 'center',
+    fontFamily: FontFamily.interRegular,
+    paddingHorizontal: 10,
+    height: 45,
+    backgroundColor: Color.beige,
+    borderRadius: Border.br_xl,
+    paddingHorizontal: 36,
+    marginVertical: 10,
+  },
+  dateTxt: {
+    fontSize: 20,
+    fontFamily: FontFamily.interRegular,
+    color: Color.black,
+    textAlign: 'left',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
+  dropdown: {
+    width: '82%',
+    marginVertical: 10,
   },
   registerBtn: {
-    top: 687,
-    left: 91,
-    backgroundColor: Color.silver,
-    width: 165,
-    height: 49,
-    paddingHorizontal: 6,
-    alignItems: "flex-end",
+    backgroundColor: '#A0BCC2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    marginTop: 30,
+    borderRadius: 20,
   },
-  whoIsRegisteringBtn: {
-    top: 597,
-    height: 49,
-    width: 256,
-    left: 46,
-    position: "absolute",
+  registerTxt: {
+    fontSize: FontSize.size_xl,
+    fontFamily: FontFamily.interRegular,
+    color: Color.black,
+    textAlign: 'center',
+    fontSize: 25,
   },
-  registrationCommon: {
-    display: 'flex',
-    backgroundColor: Color.ivory,
-    flex: 1,
-    width: "100%",
-    height: 800,
-    overflow: "hidden",
-  },
+
 });
 
 export default RegistrationCommon;

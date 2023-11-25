@@ -4,12 +4,14 @@ import InstructorContainer from "../components/InstructorContainer";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
 import Topbar1 from "../components/Topbar1";
+import { StatusBar } from "expo-status-bar";
 
 const LANDINGPAGE = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.landingPage}>
+      <StatusBar/>    
       {/* <Topbar1/> */}
       <InstructorContainer />
       <View style={styles.downContent}>

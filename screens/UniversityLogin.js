@@ -5,6 +5,7 @@ import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 import {app} from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { StatusBar } from "expo-status-bar";
 
 const UniversityLogin = () => {
   const navigation = useNavigation();const [username, setUsername] = React.useState('');
@@ -68,40 +69,42 @@ const UniversityLogin = () => {
     // navigation.navigate("UniversityDetails");
     getUserData(username,password);
   }
-
+  
   return (
-    <View style={styles.universityLogin}>
-      <View style={[styles.universityLoginChild, styles.signInLayout]} />
-      <TextInput
-        style={[styles.username, styles.usernameLayout]}
-        placeholder="Username"
-        keyboardType='email-address'
-        placeholderTextColor="#000"
-        value={username}
-        onChangeText={usernameTextHandler}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={[styles.password, styles.usernameLayout]}
-        placeholder="Password"
-        keyboardType="default"
-        placeholderTextColor="#000"
-        value={password}
-        onChangeText={passwordTextHandler}
-        autoCapitalize="none"
-      />
+    <View style={styles.studentLogin}>
+      <Text style={styles.header}>University</Text>
+      <StatusBar/>
+      <View style={styles.midddleBox} >
+        <TextInput
+          style={styles.inputbox}
+          placeholder="Username"
+          keyboardType='email-address'
+          placeholderTextColor="#000"
+          value={username}
+          onChangeText={usernameTextHandler}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.inputbox}
+          placeholder="Password"
+          keyboardType="default"
+          placeholderTextColor="#000"
+          value={password}
+          onChangeText={passwordTextHandler}
+          autoCapitalize="none"
+        />
+        <Pressable
+          style={styles.signIn}
+          onPress={() => beforeNavigation()}
+        >
+          <Text style={styles.signintxt}>Sign In</Text>
+        </Pressable>
+      </View>
       <Pressable
-        style={[styles.signIn, styles.signInLayout]}
-        onPress={() => beforeNavigation()}
-      >
-        <Text style={[styles.signIn1, styles.signIn1Clr]}>Sign In</Text>
-      </Pressable>
-      <Text style={[styles.university, styles.signIn1Clr]}>University</Text>
-      <Pressable
-        style={styles.forgotPassword}
+        style={styles.forgetPasswordBox}
         onPress={() => navigation.navigate("UniversityHome")}
       >
-        <Text style={[styles.forgotPassword1, styles.signIn1Typo]}>
+        <Text style={styles.forgotPassword}>
           Forgot Password
         </Text>
       </Pressable>
@@ -110,85 +113,153 @@ const UniversityLogin = () => {
 };
 
 const styles = StyleSheet.create({
-  signInLayout: {
-    borderRadius: Border.br_xl,
-    position: "absolute",
+  studentLogin: {
+    backgroundColor: Color.ivory,
+    flex: 1,
+    width: "100%",
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  usernameLayout: {
+  header: {
+    fontSize: FontSize.size_5xl,
+    fontWeight: "700",
+    fontFamily: FontFamily.interBold,
+    textAlign: "left",
+    color: Color.black,
+    textAlign: "left",
+    top: '15%',
+    position: 'absolute'
+  },
+  midddleBox: {
+    backgroundColor: Color.blanchedalmond_100,
+    borderRadius: Border.br_xl,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '85%',
+    paddingVertical: 30,
+    marginVertical: 10,
+  },
+  inputbox: {
     fontSize: FontSize.size_lg,
     fontFamily: FontFamily.interRegular,
     paddingVertical: Padding.p_lg,
     paddingHorizontal: Padding.p_18xl,
     height: 60,
-    width: 250,
+    width: '85%',
     backgroundColor: Color.beige,
-    left: 55,
     borderRadius: Border.br_xl,
-    position: "absolute",
-  },
-  signIn1Clr: {
-    color: Color.black,
-    textAlign: "left",
-  },
-  signIn1Typo: {
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
-  },
-  universityLoginChild: {
-    top: 184,
-    left: 35,
-    backgroundColor: Color.blanchedalmond_100,
-    width: 290,
-    height: 345,
-  },
-  username: {
-    top: 238,
-  },
-  password: {
-    top: 336,
-  },
-  signIn1: {
-    textAlign: "left",
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.interRegular,
+    marginVertical: 10,
   },
   signIn: {
-    top: 434,
-    left: 71,
+    marginTop: 20,
     backgroundColor: Color.silver,
-    width: 218,
-    height: 51,
     paddingHorizontal: Padding.p_57xl,
     paddingVertical: Padding.p_smi,
+    justifyContent: "center",
+    alignItems: 'center',
+    borderRadius: Border.br_xl,
+  },
+  signintxt: {
+    textAlign: "left",
+    fontSize: FontSize.size_xl,
+    fontFamily: FontFamily.interRegular,
+    color: Color.black,
+    textAlign: "left",
+    fontWeight: 'bold',
+  },
+  forgetPasswordBox: {
+    position: 'absolute',
+    zIndex: 1,
     justifyContent: "flex-end",
-  },
-  university: {
-    top: 97,
-    left: 120,
-    fontSize: FontSize.size_5xl,
-    fontWeight: "700",
-    fontFamily: FontFamily.interBold,
-    textAlign: "left",
-    position: "absolute",
-  },
-  forgotPassword1: {
-    textDecorationLine: "underline",
-    color: Color.red,
-    width: 160,
-    textAlign: "left",
+    top: '90%'
   },
   forgotPassword: {
-    left: 100,
-    top: 634,
-    position: "absolute",
+    textDecorationLine: "underline",
+    color: Color.red,
+    textAlign: "left",
+    zIndex: 2,
+    fontSize: FontSize.size_xl,
   },
-  universityLogin: {
-    backgroundColor: Color.ivory,
-    flex: 1,
-    width: "100%",
-    height: 800,
-    overflow: "hidden",
-  },
+  // signInLayout: {
+  //   borderRadius: Border.br_xl,
+  //   position: "absolute",
+  // },
+  // usernameLayout: {
+  //   fontSize: FontSize.size_lg,
+  //   fontFamily: FontFamily.interRegular,
+  //   paddingVertical: Padding.p_lg,
+  //   paddingHorizontal: Padding.p_18xl,
+  //   height: 60,
+  //   width: 250,
+  //   backgroundColor: Color.beige,
+  //   left: 55,
+  //   borderRadius: Border.br_xl,
+  //   position: "absolute",
+  // },
+  // signIn1Clr: {
+  //   color: Color.black,
+  //   textAlign: "left",
+  // },
+  // signIn1Typo: {
+  //   fontSize: FontSize.size_xl,
+  //   fontFamily: FontFamily.interRegular,
+  // },
+  // universityLoginChild: {
+  //   top: 184,
+  //   left: 35,
+  //   backgroundColor: Color.blanchedalmond_100,
+  //   width: 290,
+  //   height: 345,
+  // },
+  // username: {
+  //   top: 238,
+  // },
+  // password: {
+  //   top: 336,
+  // },
+  // signIn1: {
+  //   textAlign: "left",
+  //   fontSize: FontSize.size_xl,
+  //   fontFamily: FontFamily.interRegular,
+  // },
+  // signIn: {
+  //   top: 434,
+  //   left: 71,
+  //   backgroundColor: Color.silver,
+  //   width: 218,
+  //   height: 51,
+  //   paddingHorizontal: Padding.p_57xl,
+  //   paddingVertical: Padding.p_smi,
+  //   justifyContent: "flex-end",
+  // },
+  // university: {
+  //   top: 97,
+  //   left: 120,
+  //   fontSize: FontSize.size_5xl,
+  //   fontWeight: "700",
+  //   fontFamily: FontFamily.interBold,
+  //   textAlign: "left",
+  //   position: "absolute",
+  // },
+  // forgotPassword1: {
+  //   textDecorationLine: "underline",
+  //   color: Color.red,
+  //   width: 160,
+  //   textAlign: "left",
+  // },
+  // forgotPassword: {
+  //   left: 100,
+  //   top: 634,
+  //   position: "absolute",
+  // },
+  // universityLogin: {
+  //   backgroundColor: Color.ivory,
+  //   flex: 1,
+  //   width: "100%",
+  //   height: 800,
+  //   overflow: "hidden",
+  // },
 });
 
 export default UniversityLogin;
