@@ -1,25 +1,13 @@
 import * as React from "react";
-import {  
-  Pressable,  
-  StyleSheet,  
-  View,  
-  ImageBackground,  
-  TextInput,  
-  Text,  
-  TouchableOpacity, 
-  Permission,
-  PermissionsAndroid,
-} from "react-native";
+import { StyleSheet, View, TextInput, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
-import {app} from '../components/firebase_config';
-import { getFirestore, getDoc, doc,updateDoc ,collection} from 'firebase/firestore';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { Color } from "../GlobalStyles";
+import { app } from '../components/firebase_config';
+import { getFirestore, getDoc, doc,updateDoc } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { getStorage, ref ,uploadBytes,getDownloadURL } from "firebase/storage";
-import { ActivityIndicator } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -30,7 +18,7 @@ const StudentProfileEdit = (p) => {
   const [ age, setAge ] = React.useState('Age');
   const [ dob, setDob ] = React.useState('Date of Birth');
   const [ image, setImage ] = React.useState(null);
-  const [ tempImage, setTempImage] = React.useState(null);
+  const [ tempImage, setTempImage ] = React.useState(null);
   const [ imageStatus, setImageStatus ] = React.useState(false);
   const [ uploading, setUploading ] = React.useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
@@ -184,6 +172,9 @@ const StudentProfileEdit = (p) => {
     navigation.navigate("StudentProfile",{id: id});
   }
   console.log('image: ' + image)
+
+
+
   return (
     <View style={styles.studentProfileEdit}>
       <View style={styles.bgcolor}>

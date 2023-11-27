@@ -1,337 +1,343 @@
 import * as React from "react";
-import { StyleSheet, View, Text, ScrollView, Pressable } from "react-native";
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-import { FontSize, Color, FontFamily, Padding, Border } from "../GlobalStyles";
+import { Color } from "../GlobalStyles";
+import { app } from '../components/firebase_config';
+import { getFirestore, getDoc, doc,updateDoc } from 'firebase/firestore';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { getStorage, ref ,uploadBytes,getDownloadURL } from "firebase/storage";
+import { Ionicons } from '@expo/vector-icons';
 
-const UniversityEdit = () => {
+const UniversityEdit = (p) => {
   const navigation = useNavigation();
+  const id=p.route.params.id;
+  const [ image, setImage ] = React.useState(null);
+  const [ tempImage, setTempImage ] = React.useState(null);
+  const [ imageStatus, setImageStatus ] = React.useState(false);
+  const [ address, setAddress ] = React.useState('');
+  const [ email, setEmail ] = React.useState('');
+  const [ city, setCity ] = React.useState('');
+  const [ contact, setContact ] = React.useState('');
+  const [ username,setUsername ] = React.useState('');
+  const [ pic, setPic ] = React.useState('');
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+
+      //firebase code to retrive information starts
+      React.useEffect(
+        () => {
+          console.log('i was called')
+          async function getUserData(){
+            const docRef = doc(db, "university", id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              console.log("Document data:", docSnap.data());
+              setUsername(docSnap.data().username);
+              setAddress(docSnap.data().address);
+              setEmail(docSnap.data().email);
+              setCity(docSnap.data().city);
+              setContact(docSnap.data().contact);
+              setTempImage(docSnap.data().photo)
+              // alert(`Your name is ${docSnap.data().email}`);
+            } else {
+              // doc.data() will be undefined in this case
+              console.log("Invalid User !!!");
+              alert("Invalid User !!!");
+            }
+          }
+          getUserData();
+        },[]);
+
+  const pickImage = async() => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4,3],
+      quality: 1,
+    });
+    if(!result.canceled) {
+      setImage(result.assets[0].uri);
+      console.log("image is: " + image);
+    }
+    else{
+      setImageStatus(false)
+    }
+  };
+
+
+  const uploadMedia = async() => {
+    // setUploading(true);
+    
+    try {
+      const { uri } = await FileSystem.getInfoAsync(image);
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+          resolve(xhr.response);
+        };
+        xhr.onerror = (e) => {
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
+      })
+      const filename = id;
+      console.log(filename);
+      const photoRef = ref(storage, filename);
+      // await photoRef.put(blob);
+      await uploadBytes(photoRef, blob).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+      });
+      // setUploading(false);
+      alert('Photo Uploaded!!!');
+      setImage(null);
+
+    } catch(error) {
+      console.error(error);
+      // setUploading(false);
+    }
+  }
+
+  async function updateData(){
+    const docRef = doc(db, "university", id);
+    console.log("id:",id);
+  await updateDoc(docRef, {
+    username: username,
+    address: address,
+    email: email,
+    city: city,
+    contact: contact,
+    "photo":pic,
+  });
+  }
+  const gsReference = ref(storage, 'gs://notes-app-44.appspot.com/'+id);
+  getDownloadURL(ref(storage, gsReference))
+  .then((url) => {
+  console.log("epic:" + url);
+  setPic(url);
+  })
+  const beforeNavigation = () => {
+    updateData();
+    uploadMedia();
+    setImageStatus(false);
+    navigation.navigate("UniversityDetails",{id: id});
+    // console.log('pic:',pic)
+  }
+
+  const test = () => {
+    setImageStatus(true);
+    pickImage();
+    console.log("Test pass !!!");
+  }
 
   return (
-    <View style={styles.universityEdit}>
-      <View style={styles.background} />
-      <Text style={[styles.universityDetails, styles.city1Typo]}>
-        University Details
-      </Text>
-      <ScrollView
-        style={styles.nameParent}
-        contentContainerStyle={styles.frameScrollViewContent}
-      >
-        <View style={styles.name}>
-          <Text style={[styles.name1, styles.name1Typo]}>Name</Text>
-        </View>
-        <View style={[styles.email, styles.emailSpaceBlock]}>
-          <Text style={[styles.name1, styles.name1Typo]}>Email</Text>
-        </View>
-        <View style={[styles.email, styles.emailSpaceBlock]}>
-          <Text style={[styles.name1, styles.name1Typo]}>Address</Text>
-        </View>
-        <View style={[styles.email, styles.emailSpaceBlock]}>
-          <Text style={[styles.contactNo1, styles.name1Typo]}>Contact No</Text>
-        </View>
-        <View style={[styles.email, styles.emailSpaceBlock]}>
-          <Text style={[styles.contactNo1, styles.name1Typo]}>Password</Text>
-        </View>
-        <View style={[styles.description, styles.citySpaceBlock]}>
-          <Text style={[styles.description1, styles.city1Typo]}>
-            Description
-          </Text>
-        </View>
-        <View style={[styles.city, styles.citySpaceBlock]}>
-          <Text style={[styles.city1, styles.city1Typo]}>City</Text>
-        </View>
-        <Pressable
-          style={[styles.logout, styles.emailSpaceBlock]}
-          onPress={() => navigation.navigate("LANDINGPAGE")}
-        >
-          <Text style={[styles.logOut, styles.name1Typo]}>Log Out</Text>
-        </Pressable>
-      </ScrollView>
-      <View style={styles.universityEditChild} />
-      <Text style={styles.welcomeUser}>Welcome user</Text>
-      <Pressable
-        style={styles.vector}
-        onPress={() => navigation.navigate("UniversityHome")}
-      >
-        <Image
-          style={[styles.icon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector.png")}
-        />
-      </Pressable>
-      <View style={styles.universityBtn}>
-        <Pressable
-          style={[styles.universityBtnChild, styles.universityPosition]}
-          onPress={() => navigation.navigate("UniversityDetails")}
-        />
-        <Pressable
-          style={[styles.universityBtnItem, styles.universityPosition]}
-          onPress={() => navigation.navigate("UniversityEdit")}
-        />
-        <View
-          style={[styles.universityBtnInner, styles.universityBtnInnerPosition]}
-        />
-        <View style={[styles.icons, styles.iconsPosition]}>
-          <Pressable
-            style={styles.universityBtnInnerPosition}
-            onPress={() => navigation.navigate("UniversityDetails")}
+    <View style={styles.container}>
+        <View style={styles.bgcolor}>
+          <TouchableOpacity 
+              style={styles.back}
+              onPress={() => navigation.navigate('UniversityDetails', {id: id})}
           >
-            <Image
-              style={[styles.icon1, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/teenyiconshomesolid1.png")}
-            />
-          </Pressable>
+                  <Ionicons name="arrow-back-sharp" size={24} color="#fefbe7" />
+                  <Text style={styles.backTxt}>Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.uniconnect}>UniConnect</Text>
         </View>
-        <Image
-          style={[styles.vectorIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector-2.png")}
-        />
-        <Pressable
-          style={[styles.iconamoonprofileFill, styles.iconsPosition]}
-          onPress={() => navigation.navigate("UniversityEdit")}
+      <View >
+        <TouchableOpacity 
+          style={styles.photoBtn}
+          onPress={() => test()}
         >
-          <Image
-            style={[styles.icon2, styles.iconLayout]}
-            contentFit="cover"
-            source={require("../assets/iconamoonprofilefill1.png")}
-          />
-        </Pressable>
+          {imageStatus ? 
+            <Image
+              source={{uri: image}}
+              style={styles.photoIcon}
+            />
+            :
+            <Image
+              source={{uri: tempImage}}
+              style={styles.photoIcon}
+            />
+          }
+        </TouchableOpacity>
+        <Text style={styles.changePhoto}>Change Image</Text>
       </View>
+        <ScrollView style={styles.scroll}>
+          <View style={styles.usernamebox}>
+            <Text style={styles.emailtxt}>USERNAME</Text>
+            <View style={styles.box}>
+              <TextInput
+                style={styles.innertxt}
+                placeholder="Username"
+                value={username}
+                onChangeText={(txt) => setUsername(txt)}
+                autoCapitalize="none"
+                placeholderTextColor="#454545"
+              />
+            </View>
+          </View>
+          <View style={styles.usernamebox}>
+            <Text style={styles.emailtxt}>Address</Text>
+            <View style={styles.box}>
+              <TextInput
+                style={styles.innertxt}
+                placeholder="Address"
+                value={address}
+                onChangeText={(txt) => setAddress(txt)}
+                autoCapitalize="none"
+                placeholderTextColor="#454545"
+              />
+            </View>
+          </View>
+          <View style={styles.usernamebox}>
+            <Text style={styles.emailtxt}>Contact Email</Text>
+            <View style={styles.box}>
+              <TextInput
+                style={styles.innertxt}
+                placeholder="Conatct Email"
+                value={email}
+                onChangeText={(txt) => setEmail(txt)}
+                autoCapitalize="none"
+                placeholderTextColor="#454545"
+              />
+            </View>
+          </View>
+          <View style={styles.usernamebox}>
+            <Text style={styles.emailtxt}>City</Text>
+            <View style={styles.box}>
+              <TextInput
+                style={styles.innertxt}
+                placeholder="City"
+                value={city}
+                onChangeText={(txt) => setCity(txt)}
+                autoCapitalize="none"
+                placeholderTextColor="#454545"
+              />
+            </View>
+          </View>
+          <View style={styles.usernamebox}>
+            <Text style={styles.emailtxt}>Contact Number</Text>
+            <View style={styles.box}>
+              <TextInput
+                style={styles.innertxt}
+                placeholder="Contact Number"
+                value={contact}
+                onChangeText={(txt) => setContact(txt)}
+                autoCapitalize="none"
+                placeholderTextColor="#454545"
+              />
+            </View>
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+        style={styles.edit}
+        onPress={() => beforeNavigation()}
+      >
+        <Text style={styles.updatetxt}>UPDATE</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  frameScrollViewContent: {
-    flexDirection: "column",
-  },
-  city1Typo: {
-    height: 34,
-    lineHeight: 34,
-    fontSize: FontSize.size_lg,
-    textAlign: "left",
-    color: Color.black,
-    fontFamily: FontFamily.interRegular,
-  },
-  name1Typo: {
-    height: 31,
-    textAlign: "left",
-    color: Color.black,
-    fontFamily: FontFamily.interRegular,
-    lineHeight: 34,
-    fontSize: FontSize.size_lg,
-  },
-  emailSpaceBlock: {
-    marginTop: 33,
-    paddingVertical: Padding.p_4xs,
-    height: 50,
-    width: 255,
-  },
-  citySpaceBlock: {
-    justifyContent: "center",
-    paddingVertical: 0,
-    marginTop: 33,
-    paddingHorizontal: Padding.p_20xl,
-    width: 255,
-    backgroundColor: Color.beige,
-    borderRadius: Border.br_3xs,
-  },
-  iconLayout: {
-    maxHeight: "100%",
-    overflow: "hidden",
-    maxWidth: "100%",
-  },
-  universityPosition: {
-    backgroundColor: Color.lightpink,
-    bottom: "12%",
-    top: "10%",
-    width: "42.9%",
-    height: "78%",
-    position: "absolute",
-  },
-  universityBtnInnerPosition: {
-    left: "0%",
-    bottom: "0%",
-    right: "0%",
-    top: "0%",
-    height: "100%",
-    position: "absolute",
-    width: "100%",
-  },
-  iconsPosition: {
-    bottom: "28%",
-    top: "32%",
-    width: "6.6%",
-    height: "40%",
-    position: "absolute",
-  },
-  background: {
-    left: 19,
-    backgroundColor: Color.blanchedalmond_100,
-    width: 312,
-    height: 790,
-    borderRadius: Border.br_3xs,
-    top: 126,
-    position: "absolute",
-  },
-  universityDetails: {
-    left: 97,
-    width: 160,
-    top: 126,
-    lineHeight: 34,
-    fontSize: FontSize.size_lg,
-    position: "absolute",
-  },
-  name1: {
-    opacity: 0.6,
-    width: 89,
-    height: 31,
-  },
-  name: {
-    paddingVertical: Padding.p_4xs,
-    width: 255,
-    paddingHorizontal: Padding.p_20xl,
-    height: 50,
-    backgroundColor: Color.beige,
-    borderRadius: Border.br_3xs,
-  },
-  email: {
-    paddingHorizontal: Padding.p_20xl,
-    marginTop: 33,
-    backgroundColor: Color.beige,
-    borderRadius: Border.br_3xs,
-  },
-  contactNo1: {
-    width: 124,
-    opacity: 0.6,
-  },
-  description1: {
-    width: 134,
-    opacity: 0.6,
-  },
-  description: {
-    height: 116,
-  },
-  city1: {
-    width: 80,
-    opacity: 0.6,
-  },
-  city: {
-    height: 50,
-  },
-  logOut: {
-    width: 89,
-    height: 31,
-  },
-  logout: {
-    borderRadius: Border.br_xl,
-    backgroundColor: Color.silver,
-    paddingHorizontal: 67,
-    alignItems: "flex-end",
-  },
-  nameParent: {
-    top: 176,
-    left: 52,
-    position: "absolute",
+  container: {
+    backgroundColor: '#fefbe7',
+    width: '100%',
+    height:'100%',
     flex: 1,
   },
-  universityEditChild: {
-    top: 0,
-    left: 0,
-    width: 360,
-    height: 122,
-    position: "absolute",
-    backgroundColor: Color.ivory,
+  back: {
+    marginLeft: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
   },
-  welcomeUser: {
-    top: 83,
-    left: 42,
-    fontSize: FontSize.size_xl,
-    width: 157,
-    height: 39,
-    textAlign: "left",
-    color: Color.black,
-    fontFamily: FontFamily.interRegular,
-    position: "absolute",
+  backTxt: {
+    fontSize: 18,
+    marginLeft: 10,
+    color: '#fefbe7'
   },
-  icon: {
-    height: "100%",
-    overflow: "hidden",
-    maxWidth: "100%",
-    width: "100%",
-    opacity: 0.6,
-  },
-  vector: {
-    left: "86.39%",
-    top: "10.38%",
-    right: "8.06%",
-    bottom: "86.5%",
-    width: "5.56%",
-    height: "3.13%",
+  studentLayout: {
+    width: 59,
+    backgroundColor: Color.gainsboro,
+    top: 5,
+    height: 40,
     position: "absolute",
   },
-  universityBtnChild: {
-    right: "52.15%",
-    left: "4.95%",
+  bgcolor: {
+    backgroundColor: '#ff8d76',
+    marginTop: 40,
+    height: '5%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  universityBtnItem: {
-    right: "4.62%",
-    left: "52.48%",
+  photoIcon: {
+    width: '100%',
+    aspectRatio: 16 / 9,
+    alignSelf: 'center',
   },
-  universityBtnInner: {
-    borderRadius: Border.br_6xl,
-    backgroundColor: Color.beige,
-    left: "0%",
-    bottom: "0%",
-    right: "0%",
-    top: "0%",
+  changePhoto: {
+    alignSelf: 'center',
+    marginTop: 10,
+    fontSize: 20,
+    color: '#454545'
   },
-  icon1: {
-    opacity: 0.5,
-    height: "100%",
-    overflow: "hidden",
-    maxWidth: "100%",
-    width: "100%",
+  box: {
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    width: '90%',
   },
-  icons: {
-    right: "70.49%",
-    left: "22.91%",
-    opacity: 0.6,
+  usernamebox: {
+    marginTop: 10,
+    alignItems: 'center'
   },
-  vectorIcon: {
-    height: "95%",
-    width: "0.31%",
-    top: "4%",
-    right: "51.86%",
-    bottom: "1%",
-    left: "47.83%",
-    opacity: 0.35,
-    position: "absolute",
+  emailtxt: {
+    alignSelf: 'flex-start',
+    marginLeft: 25,
+    marginBottom: 10,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
-  icon2: {
-    height: "100%",
-    overflow: "hidden",
-    maxWidth: "100%",
-    width: "100%",
+  innertxt: {
+    marginLeft: 20,
+    fontSize: 15,
+    fontWeight: 'bold',
+    width: '100%',
+    height: '100%',
+    color: 'grey'
   },
-  iconamoonprofileFill: {
-    left: "70.59%",
-    right: "22.81%",
+  edit: {
+    width: '100%',
+    height: '8%',
+    backgroundColor: '#ff8d76',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 0
   },
-  universityBtn: {
-    top: 730,
-    left: 28,
-    width: 323,
-    height: 50,
-    position: "absolute",
+  updatetxt: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fefbe7'
   },
-  universityEdit: {
-    height: 800,
-    width: "100%",
-    flex: 1,
-    backgroundColor: Color.ivory,
+  uniconnect: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fefbe7',
+    marginRight: 20
+  },
+  scroll: {
+    width: '100%',
+    // height: '70%', // Remove or comment out this line
+    marginBottom: 80,
   },
 });
 

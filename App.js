@@ -30,6 +30,7 @@ import StudentSearch from "./screens/StudentSearch";
 import StudentHome from "./screens/StudentHome";
 import StudentChatScreen from './screens/StudentChatScreen'
 import StudentProfileSettings from "./screens/StudentProfileSettings";
+import UniversityProfileSettings from './screens/UniversityProfileSettings';
 import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -315,6 +316,14 @@ const App = () => {
                 <Stack.Screen
                   name="StudentProfileSettings"
                   component={StudentProfileSettings}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
+                />
+                <Stack.Screen
+                  name="UniversityProfileSettings"
+                  component={UniversityProfileSettings}
                   options={{ 
                     headerShown: false,
                     animation: 'slide_from_right'
