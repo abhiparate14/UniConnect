@@ -3,7 +3,7 @@ import React from 'react'
 import { Image } from 'react-native'
 
 const ExploreCard = ({ universityImage, universityName, universityLocation}) => {
-  // console.log(universityImage)
+  console.log('image23: '+universityImage);
   return (
     <View style={styles.container}>
       <Image 

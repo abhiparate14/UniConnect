@@ -121,10 +121,12 @@ const UniversityEdit = (p) => {
   setPic(url);
   })
   const beforeNavigation = () => {
-    updateData();
-    uploadMedia();
-    setImageStatus(false);
-    navigation.navigate("UniversityDetails",{id: id});
+    uploadMedia().then(()=>{
+      updateData().then(()=>{
+        setImageStatus(false);
+        navigation.navigate("UniversityDetails",{id: id});
+      });
+    })
     // console.log('pic:',pic)
   }
 

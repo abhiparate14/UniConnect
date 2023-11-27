@@ -16,7 +16,7 @@ const StudentHome = (p) => {
   const db = getFirestore(app);
   const id=p.route.params.id;
   // const id = 'viral@gmail.com';
-  // alert(id);
+
   //start of firebase
   const [username, setUsername] = React.useState('');
   // console.log(id);
@@ -43,11 +43,8 @@ const StudentHome = (p) => {
         const docRef = doc(db, "student", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          // console.log("Document data:", docSnap.data());
           setUsername(docSnap.data().username);
-          // alert(`Your name is ${docSnap.data().email}`);
         } else {
-          // doc.data() will be undefined in this case
           console.log("Invalid User !!!");
           alert("Invalid User !!!");
         }
@@ -55,59 +52,10 @@ const StudentHome = (p) => {
       getUserData();
 },[])
   //end of firebase
-  const demo_data = [{
-    id: 1,
-    universityImage: 'https://images.pexels.com/photos/356065/pexels-photo-356065.jpeg',
-    universityName: "Nirma University",
-    universityLocation: "Ahmedabad,Gujarat",
-  },
-  {
-    id: 2,
-    universityImage: 'https://images.pexels.com/photos/356065/pexels-photo-356065.jpeg',
-    universityName: "L. D. College",
-    universityLocation: "Ahmedabad, Gujarat",
-  },
-  {
-    id: 3,
-    universityImage: 'https://images.pexels.com/photos/356065/pexels-photo-356065.jpeg',
-    universityName: "Gujarat University",
-    universityLocation: "Ahmedabad, Gujarat",
-  },
-  {
-    id: 4,
-    universityImage: 'https://images.pexels.com/photos/356065/pexels-photo-356065.jpeg',
-    universityName: "Ganpat University",
-    universityLocation: "Ahmedabad, Gujarat",
-  }]
+
 
   return (
     <View style={styles.studentHome}>
-      {/* <ScrollView
-        style={styles.card1Parent}
-        contentContainerStyle={styles.frameScrollViewContent}
-        scrollEnabled={true}
-        height={600}
-      >
-        <ExploreContainer />
-        <ExploreCard
-          universityName={require("../assets/rectangle-585.png")}
-          universityLocation="Nirma University"
-          collegeName="Ahmedabad,Gujarat"
-        />
-        <ExploreCard
-          universityName={require("../assets/rectangle-586.png")}
-          universityLocation="L. D. College"
-          collegeName="Ahmedabad, Gujarat"
-          propWidth={144}
-        />
-        <ExploreCard
-          universityName={require("../assets/rectangle-587.png")}
-          universityLocation="Gujarat University"
-          collegeName="Ahmedabad, Gujarat"
-          propWidth={172}
-        />
-        <Text style={[styles.loadMore, styles.welcomeTypo]}>Load More</Text>
-      </ScrollView> */}
       <View style={styles.welcomeBox}>
         <Text style={styles.welcomeTxt}>WELCOME !</Text>
         <Text style={styles.username}>{username}</Text>
