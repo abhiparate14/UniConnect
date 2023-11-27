@@ -86,7 +86,7 @@ const UniversityHome = (p) => {
           <Text style={styles.btntxt}>Add Event</Text>
         </TouchableOpacity>
       </View>
-      <BottomBarUniversity page={'UniversityHome'}/>
+      <BottomBarUniversity page={'UniversityHome'} id={id}/>
     </View>
   );
 };
