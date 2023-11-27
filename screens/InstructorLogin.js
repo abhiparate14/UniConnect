@@ -11,7 +11,8 @@ const InstructorLogin = () => {
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [isError, setError] = React.useState(false);
+  // const [isError, setError] = React.useState(false);
+  // let isError=true;
 
     // start of firebase
 
@@ -21,37 +22,23 @@ const InstructorLogin = () => {
         alert("Please enter email and password");
         return;
       }
-      signInWithEmailAndPassword(auth, email, password)
+      signInWithEmailAndPassword(auth, email, password).then(()=>{
+        navigation.navigate("InsructerHome",{id:email});
+      })
       .catch((error) => {
+        // isError=false;
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log("error code:", errorCode);
         console.log("error message:", errorMessage);
         alert(errorMessage);
-        setError(true);
       });
-      if(!isError){
+      // if(isError){
         // notification();
-        navigation.navigate("InsructerHome",{id:email});
-      }
+        // isError=false;
+      // }
       
     }
-    // get the data from firebase
-    async function getUserData(username,password){
-      const db = getFirestore(app);
-      const docRef = doc(db, "instructor", username);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        signInUser(username,password);
-        // alert(`Your name is ${docSnap.data().email}`);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("Invalid User !!!");
-        alert("Invalid User !!!");
-      }
-    }
-    // end of firebase
 
   const usernameTextHandler = (username) => {
     setUsername(username);
@@ -60,15 +47,9 @@ const InstructorLogin = () => {
   const passwordTextHandler = (password) => {
     setPassword(password);
   }
-
-  const printDetails = () => {
-    console.log("Username: "+username+"\n"+"Password:"+password);
-  }
-
   const beforeNavigation = () => {
-    // printDetails();
-    // navigation.navigate("InsructerHome");
-    getUserData(username,password);
+
+    signInUser(username,password);
   }
 
   return (

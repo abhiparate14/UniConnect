@@ -13,6 +13,8 @@ const StudentSearch = (p) => {
   const id = p.route.params.id;
   console.log('id: ' + id)
   const [instructor, setInstructor] = React.useState([]);
+  const [university,setUniversity]=React.useState([]);
+  
   // const instructor = [];
   
   React.useEffect(() => {
@@ -70,6 +72,29 @@ const StudentSearch = (p) => {
     addinstructornameinstudent();
     navigation.navigate('StudentChatScreen', {InstructorEmail: InstructorEmail, StudentEmail : id, InstructorName: instructor.username});
   }
+
+
+  //univercity
+  React.useEffect(() => {
+    async function getUserData() {
+      const db = getFirestore(app);
+      const querySnapshot = await getDocs(collection(db, "university"));
+      const universitys = [];
+      querySnapshot.forEach((doc) => {
+        universitys.push(doc.data());
+      });
+      if (universitys.length > 0) {
+        console.log("universitys:", universitys);
+        setUniversity(universitys);
+      } else {
+        console.log("Invalid User !!!");
+        alert("Invalid User !!!");
+      }
+    }
+    getUserData();
+  }, []);
+  console.log('univercity:::',university);
+  //end of univercity
   
   return (
     <View style={styles.studentSearch}>
@@ -87,19 +112,42 @@ const StudentSearch = (p) => {
         </Text>
       </Pressable>
       <Text style={[styles.search, styles.searchPosition]}>Search</Text>
-      <View style={styles.scroll}>
+      {/* <View style={styles.scroll}>
         <Text style={styles.instructor}>
           Instructors:
         </Text>
         <TouchableOpacity
           onPress={() => beforeNavigation()}
         >
-          <Text style={styles.chikable}>{instructor.username}</Text>
-        </TouchableOpacity>
-        <ScrollView>
+          <Text style={styles.chikable}>{university.username}</Text>
           
+        </TouchableOpacity>
+          {
+            university.map((item)=>{
+              console.log('item:',item.username);
+              <Text style={styles.chikable}>{item.username}</Text>
+            })
+          }
+        <ScrollView>
         </ScrollView>
-      </View>
+      </View> */}
+
+<View style={styles.scroll}>
+  <Text style={styles.instructor}>
+    Instructors:
+  </Text>
+  <ScrollView>
+  {
+    university.map((item, index) => (
+      <TouchableOpacity key={index} onPress={() => beforeNavigation()}>
+        <Text style={styles.chikable}>{item.username}</Text>
+      </TouchableOpacity>
+    ))
+  }
+    {/* Additional content goes here */}
+  </ScrollView>
+</View>
+
 
       <BottomBarStudent page={'StudentSearch'} id={id}/>
     </View>

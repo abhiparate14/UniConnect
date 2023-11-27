@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Border, FontSize, FontFamily, Padding, Color } from "../GlobalStyles";
 // import { initializeApp } from 'firebase/app';
 import {app} from '../components/firebase_config';
-import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
+// import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
 import { StatusBar } from "expo-status-bar";
 
@@ -13,9 +13,6 @@ const StudentLogin = () => {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const auth = getAuth(app);
-  // const [isError, setError] = React.useState(false);
-
-  // start of firebase
 
   function signInUser(email, password){
     if(email === '' || password === ''){
@@ -36,23 +33,6 @@ const StudentLogin = () => {
     
   }
 
-  // get the data from firebase
-  async function getUserData(username,password){
-    const db = getFirestore(app);
-    const docRef = doc(db, "student", username);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      signInUser(username,password);
-      
-      // alert(`Your name is ${docSnap.data().email}`);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("Invalid User !!!");
-      alert("Invalid User !!!");
-    }
-  }
-  // end of firebase
 
   const usernameTextHandler = (username) => {
     setUsername(username);
@@ -62,24 +42,19 @@ const StudentLogin = () => {
     setPassword(password);
   }
 
-  const printDetails = () => {
-    console.log("Username: "+username+"\n"+"Password:"+password);
-  }
+
 
   const beforeNavigation = () => {
     // printDetails();
-    // signInUser(username, password);
-    getUserData(username,password);
-    // navigation.navigate("StudentHome");
+    signInUser(username, password);
+
   }
 
   function forgetPassword() {
     console.log("inside forgot password");
     sendPasswordResetEmail(auth, username)
     .then(() => {
-      // Password reset email sent!
       alert("Password Reset Mail Sent !!");
-      // ..
     })
     .catch((error) => {
       const errorCode = error.code;

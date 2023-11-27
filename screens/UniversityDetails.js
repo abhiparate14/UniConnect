@@ -10,9 +10,11 @@ import {
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
+import BottomBarUniversity from "../components/BottomBarUniversity";
 
-const UniversityDetails = () => {
+const UniversityDetails = (p) => {
   const navigation = useNavigation();
+  const id=p.route.params.id;
 
   return (
     <View style={styles.universityDetails}>
@@ -54,46 +56,7 @@ L.L.B`}</Text>
         >{`bla bal bla bla bla bla bla
 bla bla bla bla bla bla bla`}</Text>
       </ScrollView>
-      <View style={[styles.universityBtn, styles.universityLayout]}>
-        <Pressable
-          style={[styles.universityBtnChild, styles.universityPosition]}
-          onPress={() => navigation.navigate("UniversityDetails")}
-        />
-        <Pressable
-          style={[styles.universityBtnItem, styles.universityPosition]}
-          onPress={() => navigation.navigate("UniversityEdit")}
-        />
-        <View
-          style={[styles.universityBtnInner, styles.universityBtnInnerPosition]}
-        />
-        <View style={[styles.icons, styles.iconsPosition]}>
-          <Pressable
-            style={styles.universityBtnInnerPosition}
-            onPress={() => navigation.navigate("UniversityDetails")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/teenyiconshomesolid.png")}
-            />
-          </Pressable>
-        </View>
-        <Image
-          style={[styles.vectorIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector-2.png")}
-        />
-        <Pressable
-          style={[styles.iconamoonprofileFill, styles.iconsPosition]}
-          onPress={() => navigation.navigate("UniversityEdit")}
-        >
-          <Image
-            style={[styles.icon1, styles.iconLayout]}
-            contentFit="cover"
-            source={require("../assets/iconamoonprofilefill.png")}
-          />
-        </Pressable>
-      </View>
+      <BottomBarUniversity page={'UniversityDetails'} id={id}/>
     </View>
   );
 };

@@ -110,10 +110,10 @@ const RegistrationCommon = () => {
     sendData();
     if (valueDropDown == 'student') {
       myPageName = 'StudentLogin';
-      navigation.navigate(myPageName);
+      navigation.navigate(myPageName,{id:emailtext});
     } else if (valueDropDown == 'instructor') {
       myPageName = 'InstructerInfo';
-      navigation.navigate(myPageName);
+      navigation.navigate(myPageName,{id:emailtext});
     } else if (valueDropDown == 'university') {
       myPageName = 'UniversityInfo';
       navigation.navigate(myPageName,{id:emailtext});
