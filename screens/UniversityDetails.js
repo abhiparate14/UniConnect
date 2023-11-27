@@ -11,11 +11,32 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import BottomBarUniversity from "../components/BottomBarUniversity";
+import app from '../components/firebase_config';
+import {doc, getDoc, getFirestore} from 'firebase/firestore';
 
 const UniversityDetails = (p) => {
   const navigation = useNavigation();
   const id=p.route.params.id;
-
+  const db=getFirestore(app);
+  const [data,setData]=React.useState([]);
+  React.useEffect(()=>{
+    async function getUserData(){
+      const docRef = doc(db, "university", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        setData(docSnap.data());
+      } 
+      else {
+        console.log("Invalid User !!!");
+        alert("Invalid User !!!");
+      }
+    }
+    getUserData();
+  },[]);
+  console.log('universityData:',data);
+  
+  
   return (
     <View style={styles.universityDetails}>
       <ImageBackground
