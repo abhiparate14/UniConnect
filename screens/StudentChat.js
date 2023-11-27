@@ -9,6 +9,7 @@ import { TextInput } from "react-native";
 import app from '../components/firebase_config';
 import { collection, doc, getDoc, getDocs, getFirestore} from 'firebase/firestore';
 import Chat_Card from '../components/Chat_Card'
+import BottomBarStudent from "../components/BottomBarStudent";
 
 const StudentChat = (p) => {
   const navigation = useNavigation();
@@ -16,6 +17,7 @@ const StudentChat = (p) => {
   console.log("id  "+id);
   const [chats,setChats] = React.useState([]);
   const [instructerName,setInstructerName] = React.useState([]);//get the names of instructer for searching
+  const [keyword,setKeyword] = React.useState('')
 
   // const db=getFirestore(app);
   React.useEffect(
@@ -62,54 +64,40 @@ const StudentChat = (p) => {
       getUserData();
     }, []);
 
-    // console.log('name:',instructerName.map());
-//end of new
+    console.log('instructors list: ' + chats);
   return (
-    <ScrollView style={styles.conatiner}>
-      {/* <Ionicons 
-        name="chevron-back-circle" 
-        size={24} 
-        color="white" 
-        style={styles.gohomeicon}
-        onPress={() => navigation.navigate('Mainpage')}
-      /> */}
-      <View style={styles.c1}>
-        <Text style={styles.formHead2}>Your Chats</Text>
-        <TextInput 
-          style={styles.searchbar} 
-          placeholder='Search'
-          onChangeText={(text) => setKeyword(text)}
-        />
-        {/* <Text>
-          {id}
-        </Text> */}
-      </View>
-
-      <View style={styles.c2}>
+    <View style={styles.master}>
+        <View style={styles.c1}>
+          <Text style={styles.formHead2}>Your Chats</Text>
+          <TextInput 
+            style={styles.searchbar} 
+            placeholder='Search'
+            onChangeText={(text) => setKeyword(text)}
+          />
+        </View>
+      <ScrollView style={styles.conatiner}>
         {
           chats.map((chat) => {
             return <Chat_Card chat={chat} studentEmail={id} />
           })
         }
-      </View>
-      {/* <View>
-        {
-          instructerName.map((item)=>{
-            <Text>{item.username}</Text>
-            console.log("Names",item.username);
-          })
-        }
-      </View> */}
-    </ScrollView>
+      </ScrollView>
+      <BottomBarStudent page={'StudentChat'} id={id}/>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  conatiner: {
+  master: {
     width: '100%',
     height: '100%',
     flex: 1,
     backgroundColor: '#fefbe7'
+  },
+  conatiner: {
+    width: '100%',
+    backgroundColor: '#fefbe7',
+    // alignItems: 'center'
   },
   gohomeicon: {
     position: 'absolute',
@@ -146,6 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     // color: 'white',
     textAlign: 'center',
+    marginTop: 10
 },
 });
 

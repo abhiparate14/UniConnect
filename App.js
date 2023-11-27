@@ -29,6 +29,7 @@ import StudentChat from "./screens/StudentChat";
 import StudentSearch from "./screens/StudentSearch";
 import StudentHome from "./screens/StudentHome";
 import StudentChatScreen from './screens/StudentChatScreen'
+import StudentProfileSettings from "./screens/StudentProfileSettings";
 import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -98,137 +99,226 @@ const App = () => {
                 <Stack.Screen
                   name="LANDINGPAGE"
                   component={LANDINGPAGE}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="UniversityExtraInfo"
                   component={UniversityExtraInfo}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InstructerExtraInfo"
                   component={InstructerExtraInfo}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentExtraInfo"
                   component={StudentExtraInfo}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentInfo"
                   component={StudentInfo}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InstructerInfo"
                   component={InstructerInfo}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="UniversityInfo"
                   component={UniversityInfo}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="RgistrationComman"
                   component={RgistrationComman}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InstructorLogin"
                   component={InstructorLogin}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="UniversityLogin"
                   component={UniversityLogin}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentLogin"
                   component={StudentLogin}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="UniversityDetails"
                   component={UniversityDetails}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="UniversityEdit"
                   component={UniversityEdit}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="UniversityHome"
                   component={UniversityHome}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InsructerEdit"
                   component={InsructerEdit}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InsructerDetails"
                   component={InsructerDetails}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InsructerChat"
                   component={InsructerChat}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="InsructerHome"
                   component={InsructerHome}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StLdCollege"
                   component={StLdCollege}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StGanpatUniversity"
                   component={StGanpatUniversity}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentSearchResult"
                   component={StudentSearchResult}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentProfile"
                   component={StudentProfile}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentChat"
                   component={StudentChat}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentSearch"
                   component={StudentSearch}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentHome"
                   component={StudentHome}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentProfileEdit"
                   component={StudentProfileEdit}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
                 <Stack.Screen
                   name="StudentChatScreen"
                   component={StudentChatScreen}
-                  options={{ headerShown: false }}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
+                />
+                <Stack.Screen
+                  name="StudentProfileSettings"
+                  component={StudentProfileSettings}
+                  options={{ 
+                    headerShown: false,
+                    animation: 'slide_from_right'
+                   }}
                 />
               </Stack.Navigator>
             ) : null}

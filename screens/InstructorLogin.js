@@ -32,7 +32,7 @@ const InstructorLogin = () => {
       });
       if(!isError){
         // notification();
-        navigation.navigate("InsructerHome");
+        navigation.navigate("InsructerHome",{id:email});
       }
       
     }

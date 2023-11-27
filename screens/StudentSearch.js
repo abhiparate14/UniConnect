@@ -6,6 +6,7 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import app from "../components/firebase_config";
 import { getFirestore ,getDocs ,doc, collection, updateDoc, arrayUnion} from 'firebase/firestore';
+import BottomBarStudent from "../components/BottomBarStudent";
 
 const StudentSearch = (p) => {
   const navigation = useNavigation();
@@ -100,7 +101,7 @@ const StudentSearch = (p) => {
         </ScrollView>
       </View>
 
-
+      <BottomBarStudent page={'StudentSearch'} id={id}/>
     </View>
   );
 };

@@ -116,7 +116,7 @@ const RegistrationCommon = () => {
       navigation.navigate(myPageName);
     } else if (valueDropDown == 'university') {
       myPageName = 'UniversityInfo';
-      navigation.navigate(myPageName);
+      navigation.navigate(myPageName,{id:emailtext});
     } else {
       myPageName = 'LANDINGPAGE';
     }

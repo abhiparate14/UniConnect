@@ -3,9 +3,33 @@ import { Text, StyleSheet, View, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontSize, FontFamily } from "../GlobalStyles";
+import app from "../components/firebase_config";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 
-const InsructerHome = () => {
+const InsructerHome = (p) => {
   const navigation = useNavigation();
+  const iid = p.route.params.id;
+  console.log(iid);
+
+  React.useEffect(
+    () => {
+      async function getUserData(){
+        const db = getFirestore(app);
+        const docRef = doc(db, "instructor", iid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          // console.log(docSnap.data());
+          
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("Invalid User !!!");
+          // alert("Invalid User !!!");
+        }
+      }
+      getUserData();
+},[])
+
 
   return (
     <View style={styles.insructerHome}>
@@ -153,7 +177,7 @@ const InsructerHome = () => {
         />
         <Pressable
           style={[styles.profile, styles.chatLayout]}
-          onPress={() => navigation.navigate("InsructerDetails")}
+          onPress={() => navigation.navigate("InsructerDetails",{id:iid})}
         >
           <Image
             style={[styles.icon, styles.iconLayout]}
@@ -164,7 +188,7 @@ const InsructerHome = () => {
         <View style={[styles.icons, styles.chatLayout]}>
           <Pressable
             style={styles.instructerBtnChildPosition}
-            onPress={() => navigation.navigate("InsructerHome")}
+            onPress={() => navigation.navigate("InsructerHome",{id:iid})}
           >
             <Image
               style={styles.iconLayout}
@@ -175,7 +199,7 @@ const InsructerHome = () => {
         </View>
         <Pressable
           style={[styles.chat, styles.chatLayout]}
-          onPress={() => navigation.navigate("InsructerChat")}
+          onPress={() => navigation.navigate("InsructerChat",{id:iid})}
         >
           <Image
             style={[styles.icon, styles.iconLayout]}

@@ -33,15 +33,15 @@ export default Chatcard
 const styles = StyleSheet.create({
   master: {
     flexDirection: 'column',
-    width: '100%',
+    width: '90%',
     marginVertical: 10,
   },
   left_align: {
-    width: '50%',
+    // width: '90%',
     flexDirection: 'row',
   },
   right_align:{
-    width: '50%',
+    // width: '90%',
     flexDirection: 'row',
     backgroundColor: 'pink',
     left: 100,
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
     borderRadius: 20,
-    width: '90%',
+    // width: '90%',
   },
   nonuser:{
     padding: 10,
@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
     color: 'black',
     textDecorationLine: 'underline',
     fontWeight: 'bold',
-    left: -50,
+    alignSelf: 'flex-start',
+    marginHorizontal: 7,
   },
   txt2: {
     left: 0,

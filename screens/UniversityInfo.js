@@ -2,9 +2,45 @@ import * as React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
+import { TextInput } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
+import app from '../components/firebase_config'
+import { getFirestore, doc, updateDoc} from 'firebase/firestore';
 
-const UniversityInfo = () => {
+const UniversityInfo = (p) => {
   const navigation = useNavigation();
+  const id = p.route.params.id;
+  // console.log(id);
+  const [address,setAddress]=React.useState('');
+  const [contact,setContact]=React.useState('');
+  const [email,setEmail]=React.useState('');
+  const [city,setCity]=React.useState('');
+
+  const beforeNavigation = async() => {
+    // console.log("before navigation");
+    // console.log(address);
+    // console.log(contact);
+    // console.log(email);
+    // console.log(city);
+    try {
+      const db = getFirestore(app); // Import firestore from firebase_config.js
+      const universityData = {
+        address: address,
+        contact: contact,
+        email: email,
+        city: city,
+      };
+      // Update document in university collection
+      const docRef = doc(db, 'university', id);
+      await updateDoc(docRef, universityData);
+      console.log('updated');
+      navigation.navigate("UniversityLogin");
+    } catch (error) {
+      console.error("Error updating document:", error);
+    }
+  }
+
+
 
   return (
     <View style={styles.universityInfo}>
@@ -16,25 +52,36 @@ const UniversityInfo = () => {
         More Infomaton about University
       </Text>
       <View style={styles.universityInfoItem} />
-      <Text style={[styles.address, styles.contactTypo]}>Address</Text>
+      <TextInput 
+      style={[styles.address, styles.contactTypo]}
+      onChangeText={(text)=>setAddress(text)}
+      >address
+      </TextInput>
       <View style={[styles.universityInfoInner, styles.universityLayout]} />
       <View style={[styles.rectangleView, styles.universityLayout]} />
       <View style={[styles.universityInfoChild1, styles.universityLayout]} />
-      <Text style={[styles.contactNo, styles.contactTypo]}>Contact No</Text>
-      <Text style={[styles.contactEmail, styles.contactTypo]}>
+      <TextInput 
+      style={[styles.contactNo, styles.contactTypo]}
+      onChangeText={(text)=>setContact(text)}
+      >Contact No</TextInput>
+      <TextInput style={[styles.contactEmail, styles.contactTypo]}
+      onChangeText={(text)=>setEmail(text)}
+      >
         Contact Email
-      </Text>
-      <Pressable
+      </TextInput>
+      {/* <Pressable
         style={[styles.rectanglePressable, styles.rectanglePressableLayout]}
         onPress={() => navigation.navigate("UniversityDetails")}
-      />
-      <Text style={[styles.skip, styles.skipTypo]}>Skip</Text>
-      <Pressable
+      /> */}
+      {/* <Text style={[styles.skip, styles.skipTypo]}>Skip</Text> */}
+      <TouchableOpacity
         style={[styles.universityInfoChild2, styles.rectanglePressableLayout]}
-        onPress={() => navigation.navigate("UniversityExtraInfo")}
+        onPress={()=>beforeNavigation()}
       />
-      <Text style={[styles.next, styles.skipTypo]}>Next</Text>
-      <Text style={[styles.city, styles.contactTypo]}>City</Text>
+      <TextInput style={[styles.city, styles.contactTypo]}
+      onChangeText={(text)=>setCity(text)}
+      >City</TextInput>
+      <Text style={[styles.next, styles.skipTypo]}>Finish</Text>
     </View>
   );
 };

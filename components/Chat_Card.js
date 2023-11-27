@@ -39,7 +39,7 @@ const Chat_Card = ({studentEmail,chat}) => {
     <View style={styles.chatacard}>
         {/* <Image source={{uri: chat.chat.profile_image}} style={styles.image} /> */}
 
-        <View style={styles.c1}>
+
             <TouchableOpacity 
                 style={styles.to}
                 onPress={() =>navigation.navigate('StudentChatScreen',{StudentEmail:studentEmail,InstructorEmail:instructerEmail,InstructorName:instructerName})}
@@ -47,7 +47,6 @@ const Chat_Card = ({studentEmail,chat}) => {
                 <Text style={styles.username}>{instructerName}</Text>
             </TouchableOpacity>
             {/* <Text style={styles.lastmessage}>hello</Text> */}
-        </View>
     </View>
   )
 }
@@ -57,11 +56,14 @@ export default Chat_Card
 const styles = StyleSheet.create({
     chatacard   : {
         // backgroundColor: '#333333',
-        width: '100%',
+        width: '90%',
         marginTop: 10,
         borderRadius: 20,
         padding: 10,
         flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 10
     },
     image: {
         width: 50,
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 10,
         borderRadius: 10,
-        alignSelf: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
     },
 })

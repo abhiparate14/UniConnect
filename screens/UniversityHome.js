@@ -3,9 +3,13 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border } from "../GlobalStyles";
+import app from '../components/firebase_config'
+import { getFirestore} from 'firebase/firestore';
 
 const UniversityHome = () => {
   const navigation = useNavigation();
+  const db=getFirestore(app);
+  
 
   return (
     <View style={styles.universityHome}>

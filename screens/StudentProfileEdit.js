@@ -18,8 +18,10 @@ import { getFirestore, getDoc, doc,updateDoc ,collection} from 'firebase/firesto
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import { getStorage, ref ,uploadBytes } from "firebase/storage";
-// import { firebase } from "@react-native-firebase/storage";
+import { getStorage, ref ,uploadBytes,getDownloadURL } from "firebase/storage";
+import { ActivityIndicator } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const StudentProfileEdit = (p) => {
   const navigation = useNavigation();
@@ -28,9 +30,20 @@ const StudentProfileEdit = (p) => {
   const [ age, setAge ] = React.useState('Age');
   const [ dob, setDob ] = React.useState('Date of Birth');
   const [ image, setImage ] = React.useState(null);
+  const [ tempImage, setTempImage] = React.useState(null);
+  const [ imageStatus, setImageStatus ] = React.useState(false);
   const [ uploading, setUploading ] = React.useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+  const storage = getStorage(app);
+  const gsReference = ref(storage, 'gs://notes-app-44.appspot.com/'+id);
 
   const db = getFirestore(app);
+
+  getDownloadURL(ref(storage, gsReference))
+  .then((url) => {
+  console.log("Profilepic:" + url);
+  setTempImage(url);
+  })
 
   const usernameTextHandler = (username) => {
     if (username != ''){
@@ -43,14 +56,30 @@ const StudentProfileEdit = (p) => {
       setAge(age);
     }
   }
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    const dt = new Date(date);
+    const temp_date  = dt.toISOString().split('T');
+    const actual_date = temp_date[0].split('-');
+    setDob(actual_date[2] + '/' + actual_date[1] + '/' + actual_date[0]);
+    hideDatePicker();
+  };
 
   const dobHandler = (date) => {
-    setDob(age);
+    handleConfirm()
   }
 
     //firebase code to retrive information starts
     React.useEffect(
       () => {
+        console.log('i was called')
         async function getUserData(){
           const docRef = doc(db, "student", id);
           const docSnap = await getDoc(docRef);
@@ -59,6 +88,7 @@ const StudentProfileEdit = (p) => {
             setUsername(docSnap.data().username);
             setAge(docSnap.data().age);
             setDob(docSnap.data().dob);
+            setTempImage(docSnap.data().photo)
             // alert(`Your name is ${docSnap.data().email}`);
           } else {
             // doc.data() will be undefined in this case
@@ -68,11 +98,9 @@ const StudentProfileEdit = (p) => {
         }
         getUserData();
       },[]);
+      
   // firebase code ends
-  
-  // getUserData();
   //firebase code to retrive information ends
-
   //send data to firebase starts
 
   async function updateData(){
@@ -96,7 +124,10 @@ const StudentProfileEdit = (p) => {
     });
     if(!result.canceled) {
       setImage(result.assets[0].uri);
-      // console.log("image is: " + image);
+      console.log("image is: " + image);
+    }
+    else{
+      setImageStatus(false)
     }
   };
 
@@ -137,8 +168,9 @@ const StudentProfileEdit = (p) => {
 
 
   const test = () => {
-    console.log("Test pass !!!");
+    setImageStatus(true);
     pickImage();
+    console.log("Test pass !!!");
   }
 
 
@@ -148,170 +180,107 @@ const StudentProfileEdit = (p) => {
     await updateData();
     await uploadMedia();
     console.log("hi");
+    setImageStatus(false);
     navigation.navigate("StudentProfile",{id: id});
   }
-
+  console.log('image: ' + image)
   return (
     <View style={styles.studentProfileEdit}>
-      <View style={styles.studentNavigationBar}>
-        <Pressable
-          style={[styles.studentNavigationBarChild, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentHome")}
-        />
-        <Pressable
-          style={[styles.studentNavigationBarItem, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentSearch")}
-        />
-        <Pressable
-          style={[styles.studentNavigationBarInner, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentChat")}
-        />
-        <Pressable
-          style={[styles.rectanglePressable, styles.studentLayout]}
-          onPress={() => navigation.navigate("StudentProfile")}
-        />
-        <View style={styles.rectangleView} />
-        <Image
-          style={[styles.seperationIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/seperation.png")}
-        />
-        <View style={styles.icons}>
-          <Pressable
-            style={[styles.teenyiconshomeSolid, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentHome")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/teenyiconshomesolid.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.zondiconssearch, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentSearch")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/zondiconssearch1.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.bxschat, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentChat")}
-          >
-            <Image
-              style={[styles.icon, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/bxschat.png")}
-            />
-          </Pressable>
-          <Pressable
-            style={[styles.iconamoonprofileFill, styles.bxschatPosition]}
-            onPress={() => navigation.navigate("StudentProfile")}
-          >
-            <Image
-              style={[styles.icon3, styles.iconLayout]}
-              contentFit="cover"
-              source={require("../assets/iconamoonprofilefill1.png")}
-            />
-          </Pressable>
-        </View>
+      <View style={styles.bgcolor}>
+        <TouchableOpacity 
+            style={styles.back}
+            onPress={() => navigation.navigate('StudentProfile', {id: id})}
+        >
+                <Ionicons name="arrow-back-sharp" size={24} color="#fefbe7" />
+                <Text style={styles.backTxt}>Back</Text>
+        </TouchableOpacity>
       </View>
-      <View>
+
+      <View style={styles.mainBody}>
         <TouchableOpacity 
         style={styles.photoBtn}
         onPress={() => test()}
         >
-          {image && <Image
-          source={{uri: image}}
-          style={styles.photoIcon}
-          />}
-
-      {/* <ImageBackground
-        style={styles.photoIcon}
-        resizeMode="cover"
-        source={require("../assets/stock_image.png")}
-      /> */}
+          {imageStatus ? 
+          <Image
+            source={{uri: image}}
+            style={styles.photoIcon}
+          />
+          :
+          <Image
+            source={{uri: tempImage}}
+            style={styles.photoIcon}
+          />
+          }
         </TouchableOpacity>
-      </View>
-      <View style={[styles.email, styles.dobFlexBox]}>
-        <Image
-          style={styles.icoutlineEmailIcon}
-          contentFit="cover"
-          source={require("../assets/icoutlineemail.png")}
-        />
-        <TextInput
-          style={[styles.email1, styles.email1Typo]}
-          placeholder="email"
-          value={id}
-          autoCapitalize="none"
-          placeholderTextColor="#454545"
-        />
-      </View>
-      <View style={[styles.dob, styles.dobFlexBox]}>
-        <Image
-          style={styles.icoutlineEmailIcon}
-          contentFit="cover"
-          source={require("../assets/fluentcalendardate28filled1.png")}
-        />
-        <TextInput
-          style={[styles.dateOfBirth, styles.email1Typo]}
-          placeholder="Date of Birth"
-          value={dob}
-          onChangeText={dobHandler}
-          keyboardType="default"
-          autoCapitalize="none"
-          placeholderTextColor="#454545"
-        />
-      </View>
-      <View style={[styles.age, styles.dobFlexBox]}>
-        <Image
-          style={styles.icoutlineEmailIcon}
-          contentFit="cover"
-          source={require("../assets/gameiconsages.png")}
-        />
-        <TextInput
-          style={[styles.email1, styles.email1Typo]}
+        <Text style={styles.changePhoto}>Change Image</Text>
+        <View style={styles.usernamebox}>
+          <Text style={styles.emailtxt}>USERNAME</Text>
+          <View style={styles.box}>
+            <TextInput
+              style={styles.innertxt}
+              placeholder="Username"
+              value={username}
+              onChangeText={usernameTextHandler}
+              autoCapitalize="none"
+              placeholderTextColor="#454545"
+            />
+          </View>
+        </View>
+        <View style={styles.usernamebox}>
+          <Text style={styles.emailtxt}>Date Of Birth</Text>
+          <TouchableOpacity 
+            style={styles.box}
+            onPress={() => {showDatePicker()}}
+          >
+            <Text
+              style={styles.innertxt}
+            >{dob}</Text>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.usernamebox}>
+          <Text style={styles.emailtxt}>AGE</Text>
+          <View style={styles.box}>
+          <TextInput
+          style={styles.innertxt}
           placeholder="Age"
           value={age}
           onChangeText={ageTextHandler}
           autoCapitalize="none"
           placeholderTextColor="#454545"
         />
+          </View>
+        </View>
       </View>
-      {/* <Text style={[styles.sevenKay, styles.saveTypo]}>{username}</Text> */}
-      <TextInput
-        style={[styles.sevenKay, styles.saveTypo]}
-        placeholder="Username"
-        value={username}
-        onChangeText={usernameTextHandler}
-        autoCapitalize="none"
-        placeholderTextColor="#454545"
-      />
       <TouchableOpacity
         style={styles.edit}
-        activeOpacity={0.2}
         onPress={() => beforeNavigation()}
       >
-        <Image
-          style={styles.mingcutesaveFillIcon}
-          contentFit="cover"
-          source={require("../assets/mingcutesavefill.png")}
-        />
-        <Text style={[styles.save, styles.saveTypo]}>save</Text>
+        <Text style={styles.updatetxt}>UPDATE</Text>
       </TouchableOpacity>
-      <Image
-        style={styles.mingcutesaveFillIcon1}
-        contentFit="cover"
-        source={require("../assets/mingcutesavefill1.png")}
-      />
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  back: {
+    marginLeft: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  backTxt: {
+    fontSize: 18,
+    marginLeft: 10,
+    color: '#fefbe7'
+  },
   studentLayout: {
     width: 59,
     backgroundColor: Color.gainsboro,
@@ -319,223 +288,72 @@ const styles = StyleSheet.create({
     height: 40,
     position: "absolute",
   },
-  iconLayout: {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    overflow: "hidden",
+  studentProfileEdit: {
+    backgroundColor: '#fefbe7',
+    width: '100%',
+    height:'100%'
   },
-  bxschatPosition: {
-    width: "7.6%",
-    bottom: "0%",
-    top: "0%",
-    height: "100%",
-    position: "absolute",
-  },
-  dobFlexBox: {
-    alignItems: "center",
-    width: 250,
-    flexDirection: "row",
-    height: 40,
-    position: "absolute",
-  },
-  email1Typo: {
-    fontSize: 18,
-    fontWeight: "700",
-    fontFamily: FontFamily.latoBold,
-  },
-  saveTypo: {
-    textAlign: "left",
-    textTransform: "capitalize",
-    fontWeight: "700",
-  },
-  studentNavigationBarChild: {
-    height: 40,
-    left: 17,
-    backgroundColor: Color.gainsboro,
-    top: 5,
-  },
-  studentNavigationBarItem: {
-    left: 91,
-    height: 40,
-  },
-  studentNavigationBarInner: {
-    left: 174,
-    height: 40,
-  },
-  rectanglePressable: {
-    left: 248,
-    height: 40,
-  },
-  rectangleView: {
-    borderRadius: Border.br_6xl,
-    overflow: "hidden",
-    backgroundColor: Color.beige,
-    left: "0%",
-    bottom: "0%",
-    top: "0%",
-    right: "0%",
-    height: "100%",
-    position: "absolute",
-    width: "100%",
-  },
-  seperationIcon: {
-    height: "80%",
-    width: "50.15%",
-    top: "10%",
-    right: "25.23%",
-    bottom: "10%",
-    left: "24.62%",
-    position: "absolute",
-  },
-  icon: {
-    opacity: 0.5,
-    height: "100%",
-    maxWidth: "100%",
-    width: "100%",
-  },
-  teenyiconshomeSolid: {
-    right: "92.4%",
-    left: "0%",
-  },
-  zondiconssearch: {
-    left: "30.8%",
-    right: "61.6%",
-  },
-  bxschat: {
-    left: "61.6%",
-    right: "30.8%",
-  },
-  icon3: {
-    height: "100%",
-    maxWidth: "100%",
-    width: "100%",
-  },
-  iconamoonprofileFill: {
-    left: "92.4%",
-    right: "0%",
-    width: "7.6%",
-  },
-  icons: {
-    height: "40%",
-    width: "80.92%",
-    top: "30%",
-    right: "10.15%",
-    bottom: "30%",
-    left: "8.92%",
-    position: "absolute",
-  },
-  studentNavigationBar: {
-    top: 718,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowRadius: 6,
-    elevation: 6,
-    shadowOpacity: 1,
-    width: 325,
-    height: 50,
-    left: 17,
-    position: "absolute",
-  },
-  photoBtn: {
-    height: 145,
-    width: 140,
-    // borderWidth: 1,
-    borderRadius: 200/2,
-    overflow: "hidden",
-    marginTop: 70,
-    top: 10,
-    left: 20,
+  bgcolor: {
+    backgroundColor: '#ff8d76',
+    marginTop: 40,
+    height: '20%'
   },
   photoIcon: {
-    height: 140,
-    width: 140,
-    borderRadius: 200/2,
-    overflow: "hidden",
-    marginTop: 70,
-    top: -68,
-    left: 0,
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginTop: -100,
+    borderWidth: 5,
+    borderColor: '#fefbe7',
+    borderRadius: 100
   },
-  icoutlineEmailIcon: {
-    width: 40,
-    height: 40,
-    overflow: "hidden",
+  changePhoto: {
+    alignSelf: 'center',
+    marginTop: 10,
+    fontSize: 20,
+    color: '#454545'
   },
-  email1: {
-    marginLeft: 45,
+  box: {
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    width: '90%',
   },
-  email: {
-    top: 248,
-    left: 24,
-    width: 250,
+  usernamebox: {
+    marginTop: 10,
+    alignItems: 'center'
   },
-  dateOfBirth: {
-    marginLeft: 41,
+  emailtxt: {
+    alignSelf: 'flex-start',
+    marginLeft: 25,
+    marginBottom: 10,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
-  dob: {
-    top: 408,
-    left: 28,
-  },
-  age: {
-    top: 328,
-    left: 24,
-    width: 250,
-  },
-  sevenKay: {
-    top: 135,
-    left: 180,
-    fontSize: 25,
-    color: Color.black,
-    width: 168,
-    height: 39,
-    textAlign: "left",
-    fontFamily: FontFamily.latoBold,
-    fontWeight: "700",
-    textTransform: "capitalize",
-    position: "absolute",
-  },
-  mingcutesaveFillIcon: {
-    width: 30,
-    height: 30,
-    overflow: "hidden",
-  },
-  save: {
-    fontSize: FontSize.size_5xl,
-    fontFamily: FontFamily.interBold,
-    color: Color.colorDarkslategray,
-    width: 94,
-    height: 32,
-    marginLeft: 26,
+  innertxt: {
+    marginLeft: 20,
+    fontSize: 15,
+    fontWeight: 'bold',
+    width: '100%',
+    height: '100%',
+    color: 'grey'
   },
   edit: {
-    top: 587,
-    left: 88,
-    borderRadius: Border.br_mini,
-    overflow: "hidden",
-    backgroundColor: Color.silver,
-    width: 191,
-    paddingHorizontal: 6,
-    paddingVertical: Padding.p_4xs,
-    flexDirection: "row",
-    height: 50,
-    position: "absolute",
+    width: '100%',
+    height: '10%',
+    backgroundColor: '#ff8d76',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 0
   },
-  mingcutesaveFillIcon1: {
-    top: 488,
-    left: 199,
-    width: 24,
-    height: 24,
-    position: "absolute",
-    overflow: "hidden",
-  },
-  studentProfileEdit: {
-    backgroundColor: Color.ivory,
-    flex: 1,
-    height: 800,
-    overflow: "hidden",
-    width: "100%",
+  updatetxt: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fefbe7'
   },
 });
 

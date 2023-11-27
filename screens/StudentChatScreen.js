@@ -93,7 +93,7 @@ const StudentChatScreen = (p) => {
   return (
     <View style={styles.container}>
       <StatusBar/>
-      <Topbar page={InstructorName}/>
+      <Topbar page={InstructorName} id={StudentEmail}/>
       <ScrollView style={styles.scroll}>
      {
         chat.map((message) => {
