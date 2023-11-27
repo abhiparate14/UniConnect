@@ -9,12 +9,14 @@ import { StatusBar } from "react-native";
 import BottomBarUniversity from "../components/BottomBarUniversity";
 import { TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";
+import { log } from "react-native-reanimated";
 
 const UniversityHome = (p) => {
   const navigation = useNavigation();
   const db=getFirestore(app);
   const id=p.route.params.id;
-  const [ eventText, setEventText ] = React.useState('')
+  const [ eventText, setEventText ] = React.useState('');
+  const [ eventList, setEventList ] = React.useState([]);
 
   React.useEffect(() => {
     // geteventdatafrommsg;
@@ -34,7 +36,6 @@ const UniversityHome = (p) => {
         const docRef = doc(db, 'university', id);
         await updateDoc(docRef, updatedData).then(()=>{
           console.log('updated');
-          eventaddmsg();
         })
     }
   }
@@ -42,7 +43,7 @@ const UniversityHome = (p) => {
   const eventaddmsg=async()=>{
     await addDoc(collection(db,'Events'),{
       event:eventText,
-      name:id,
+      email:id,
       createAt:serverTimestamp()
     }).then(()=>{
       console.log('event added to msg');
@@ -52,18 +53,25 @@ const UniversityHome = (p) => {
   const geteventdatafrommsg=async()=>{
     const docRef = collection(db, "Events");
         const q = query(docRef, 
-            where("name", "==", id),
+            where("email", "==", id),
             orderBy("createAt", "asc")
             );
-            const arr = [];
-        const querySnapshot = onSnapshot(q, (querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-          arr.push(doc.data().event);
-          })
-        });
-        console.log('arr:',arr);
-        console.log('qs'+querySnapshot);
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+              const msgs = [];
+              querySnapshot.forEach((doc) => {
+                  msgs.push({
+                      id: doc.id,
+                      ...doc.data()
+                  })
+              })
+              // console.log(msgs);
+              setEventList(msgs);
+          });
+          return () => {
+              unsubscribe();
+          }
   }
+  console.log('eventlist:',eventList);
   
   const buttonHandler = () => {
     addEvent();
