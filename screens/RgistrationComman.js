@@ -59,7 +59,7 @@ const RegistrationCommon = () => {
         password: passwordtext,
         dob: selectedDate,
         type: valueDropDown,
-        photo: "gs://notes-app-44.appspot.com/stock_image.png"
+        photo: "https://firebasestorage.googleapis.com/v0/b/notes-app-44.appspot.com/o/stock_image.png?alt=media&token=905bd8fd-1fae-4728-8069-803c666294b0"
 
       });
     }

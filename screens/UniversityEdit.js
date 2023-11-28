@@ -37,7 +37,7 @@ const UniversityEdit = (p) => {
               console.log("Document data:", docSnap.data());
               setUsername(docSnap.data().username);
               setAddress(docSnap.data().address);
-              setEmail(docSnap.data().email);
+              setEmail(docSnap.data().contact_email);
               setCity(docSnap.data().city);
               setContact(docSnap.data().contact);
               setTempImage(docSnap.data().photo)
@@ -108,7 +108,7 @@ const UniversityEdit = (p) => {
   await updateDoc(docRef, {
     username: username,
     address: address,
-    email: email,
+    contact_email: email,
     city: city,
     contact: contact,
     "photo":pic,

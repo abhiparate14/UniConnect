@@ -47,6 +47,7 @@ const UniversityHome = (p) => {
       createAt:serverTimestamp()
     }).then(()=>{
       console.log('event added to msg');
+      setEventText('')
     });
   }
 

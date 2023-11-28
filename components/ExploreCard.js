@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Image } from 'react-native'
+import { TouchableOpacity } from 'react-native'
+import { useNavigation } from "@react-navigation/native";
 
-const ExploreCard = ({ universityImage, universityName, universityLocation}) => {
-  console.log('image23: '+universityImage);
+const ExploreCard = ({ universityImage, universityName, universityLocation, id, universityID}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Image 
@@ -15,9 +17,12 @@ const ExploreCard = ({ universityImage, universityName, universityLocation}) => 
           <Text style={styles.uniTxt}>{universityName}</Text>
           <Text style={styles.locTxt}>{universityLocation}</Text>
         </View>
-        <View style={styles.exploreBox}>
-          <Text style={styles.exploretxt}>Explore</Text>
-        </View>
+        <TouchableOpacity 
+          onPress={()=> navigation.navigate('InstructorViewUni', {id:universityID, sid: id, type:'student'})}>
+          <View style={styles.exploreBox}>
+            <Text style={styles.exploretxt}>Explore</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   )

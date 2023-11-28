@@ -9,6 +9,8 @@ import BottomBarStudent from "../components/BottomBarStudent";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { getDocs, collection } from "firebase/firestore";
+import StudentHomeUniCard from "../components/StudentHomeUniCard";
+import { log } from "react-native-reanimated";
 
 
 const StudentHome = (p) => {
@@ -16,25 +18,11 @@ const StudentHome = (p) => {
   const db = getFirestore(app);
   const id=p.route.params.id;
   // const id = 'viral@gmail.com';
+  const [ mypref,setMypref ] = React.useState([]);
+  const [ username,setUsername ] = React.useState('');
 
   //start of firebase
-  const [username, setUsername] = React.useState('');
-  // console.log(id);
-  const [university_data,setUniversityData] = React.useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "university"));
-      const data = [];
-      querySnapshot.forEach((doc) => {
-        data.push(doc.data());
-      });
-      setUniversityData(data);
-    };
-    
-    fetchData();
-  }, []);
   
-  console.log('university data: ', university_data)
 
   React.useEffect(
     () => {
@@ -43,16 +31,18 @@ const StudentHome = (p) => {
         const docRef = doc(db, "student", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setUsername(docSnap.data().username);
-        } else {
+          setMypref(docSnap.data().MyPreference)
+          setUsername(docSnap.data().username)
+        } 
+        else {
+          // doc.data() will be undefined in this case
           console.log("Invalid User !!!");
           alert("Invalid User !!!");
         }
       }
       getUserData();
-},[])
-  //end of firebase
-
+// firebase code ends
+},[]);
 
   return (
     <View style={styles.studentHome}>
@@ -62,14 +52,9 @@ const StudentHome = (p) => {
       </View>
       <ScrollView style={styles.scrollview}>
       {
-        university_data.map((uni) => {
+        mypref.map((uni) => {
           return (
-            <ExploreCard
-              // key={uni.id}
-              universityImage={uni.photo}
-              universityName={uni.username}
-              universityLocation={uni.address}
-            />
+            <StudentHomeUniCard uni_id={uni} sid={id}/>
           );
         })
       }

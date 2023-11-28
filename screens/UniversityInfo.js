@@ -27,8 +27,9 @@ const UniversityInfo = (p) => {
       const universityData = {
         address: address,
         contact: contact,
-        email: email,
+        contact_email: email,
         city: city,
+        MyInstructors: [],
       };
       // Update document in university collection
       const docRef = doc(db, 'university', id);

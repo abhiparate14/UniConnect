@@ -2,26 +2,29 @@ import * as React from "react";
 import { StyleSheet, View, Image, ScrollView, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import BottomBarUniversity from "../components/BottomBarUniversity";
-import UniversityProfileTopbar from "../components/UniversityProfileTopbar";
-import app from '../components/firebase_config';
+import { arrayUnion, doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { TouchableOpacity } from "react-native";
+import app from '../components/firebase_config';
 
-const UniversityDetails = (p) => {
+const InstructorViewUni = (p) => {
   const navigation = useNavigation();
-  const id = p.route.params.id;
+  const university_id = p.route.params.id;
+  const instructor_id = p.route.params.iid;
+  const student_id = p.route.params.sid;
+  const type = p.route.params.type;
   const db = getFirestore(app);
   const [data, setData] = React.useState([]);
 
+  console.log('uni id: '+ university_id + ' student id: ' + student_id);
+
   // fetch data
   React.useEffect(() => {
-    console.log("hello love");
     async function getUserData() {
-      const docRef = doc(db, "university", id);
+      const docRef = doc(db, "university", university_id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
@@ -33,15 +36,53 @@ const UniversityDetails = (p) => {
     }
     getUserData();
   }, []);
-  console.log('universityData:', data);
+
+  const whereTypeIsInstructor = async() => {
+    const docRef1 = doc(db, "university", university_id);
+    await updateDoc(docRef1, {
+      MyInstructors: arrayUnion(instructor_id),
+    }).then(()=>{
+      console.log("university updated!");
+    })
+
+    const docRef2=doc(db,'instructor',instructor_id);
+      await updateDoc(docRef2,{
+        MyUniversitys:arrayUnion(university_id),
+      }).then(()=>{
+        console.log("instructor updated!");
+      })
+  }
+  const myPrefer = async()=>{
+    const docRef1 = doc(db, "student", student_id);
+    await updateDoc(docRef1, {
+      MyPreference: arrayUnion(university_id),
+    }).then(()=>{
+      console.log("university added to student data!");
+    })
+  }
+
+  const beforeNavigation = () => {
+    if (type == 'instructor'){
+      whereTypeIsInstructor();
+    }
+    if (type == 'student'){
+      myPrefer();
+    }
+  }
+
 
   return (
     <View style={styles.container}>
       <StatusBar />
-      <UniversityProfileTopbar id={id} />
-      {/* Image at the top after the UniversityProfileTopbar */}
+      <View style={styles.topbar}>
+        <TouchableOpacity
+          style={styles.back}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="left" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <Image source={{ uri: data.photo }} style={styles.logo} />
-      {/* Other components go here */}
       <ScrollView style={styles.scroll}>
         <View style={styles.usernamebox}>
           <Text style={styles.emailtxt}>USERNAME</Text>
@@ -80,10 +121,17 @@ const UniversityDetails = (p) => {
         </View>
         {/* Add more fields as needed */}
       </ScrollView>
-      <BottomBarUniversity page={'UniversityDetails'} id={id} />
+      <TouchableOpacity
+        style={styles.edit}
+        onPress={() => beforeNavigation()}
+      >
+        <Text style={styles.updatetxt}>ADD</Text>
+      </TouchableOpacity>
     </View>
-  );
-};
+  )
+}
+
+export default InstructorViewUni
 
 const styles = StyleSheet.create({
   container: {
@@ -93,6 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column', // Ensure child components are arranged in a column
   },
   logo: {
+    marginTop: 40,
     width: '100%', // Take 100% width of the container
     aspectRatio: 16 / 9, // Maintain the aspect ratio (adjust as needed)
     resizeMode: 'cover', // or 'contain' based on your preference
@@ -126,6 +175,30 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 85
   },
-});
-
-export default UniversityDetails;
+  edit: {
+    width: '100%',
+    height: '8%',
+    backgroundColor: '#ff8d76',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 0
+  },
+  updatetxt: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fefbe7'
+  },
+  topbar: {
+    width: '100%',
+    height: '5%',
+    backgroundColor: '#ff8d76',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40
+  },
+  back: {
+    position: 'absolute',
+    left: 10,
+  }
+})
