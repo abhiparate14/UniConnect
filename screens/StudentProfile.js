@@ -28,7 +28,7 @@ const StudentProfile = (p) => {
   
   getDownloadURL(ref(storage, gsReference))
   .then((url) => {
-  console.log("Profilepic:" + url);
+  // console.log("Profilepic:" + url);
   setProfilepic(url)
   })
   //firebase code to retrive information starts
@@ -39,7 +39,7 @@ const StudentProfile = (p) => {
         const docRef = doc(db, "student", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
+          // console.log("Document data:", docSnap.data());
           setUsername(docSnap.data().username);
           setAge(docSnap.data().age);
           setDob(docSnap.data().dob);
@@ -71,7 +71,7 @@ const StudentProfile = (p) => {
               style={styles.photoIcon}
               />
               :
-              <ActivityIndicator/>
+              <ActivityIndicator size={50} color="#0000ff" />
             }
           <View style={styles.usernamebox}>
             <Text style={styles.emailtxt}>USERNAME</Text>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
@@ -7,10 +7,7 @@ import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
 const Chat_Card = ({studentEmail,chat}) => {
     const navigation = useNavigation();
-    // console.log(chat.chat.profile_image)
     const instructerEmail=chat;
-    console.log(instructerEmail);
-    console.log(studentEmail);
     const [instructerName,setInstructerName] = useState('');
 
     React.useEffect(
@@ -20,7 +17,7 @@ const Chat_Card = ({studentEmail,chat}) => {
             const docRef = doc(db, "instructor", instructerEmail);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-              console.log("Document data:", docSnap.data());
+              // console.log("Document data:", docSnap.data());
               // StudentName = docSnap.data().username
               setInstructerName(docSnap.data().username);
               // alert(`Your name is ${docSnap.data().email}`);
@@ -33,20 +30,23 @@ const Chat_Card = ({studentEmail,chat}) => {
           getUserData();
     },[])
 
-    console.log(instructerName);
+    // console.log(instructerName);
     
   return (
     <View style={styles.chatacard}>
-        {/* <Image source={{uri: chat.chat.profile_image}} style={styles.image} /> */}
+      
+      <TouchableOpacity 
+        style={styles.to}
+        onPress={() =>navigation.navigate('StudentChatScreen',{StudentEmail:studentEmail,InstructorEmail:instructerEmail,InstructorName:instructerName})}
+      >
+        {
+          instructerName ?
+          <Text style={styles.username}>{instructerName}</Text>
+          :
+          <ActivityIndicator size={50} color="#0000ff" />
 
-
-            <TouchableOpacity 
-                style={styles.to}
-                onPress={() =>navigation.navigate('StudentChatScreen',{StudentEmail:studentEmail,InstructorEmail:instructerEmail,InstructorName:instructerName})}
-            >
-                <Text style={styles.username}>{instructerName}</Text>
-            </TouchableOpacity>
-            {/* <Text style={styles.lastmessage}>hello</Text> */}
+        }
+      </TouchableOpacity>
     </View>
   )
 }
@@ -55,7 +55,6 @@ export default Chat_Card
 
 const styles = StyleSheet.create({
     chatacard   : {
-        // backgroundColor: '#333333',
         width: '90%',
         marginTop: 10,
         borderRadius: 20,

@@ -4,6 +4,7 @@ import {app} from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc, updateDoc, arrayUnion} from 'firebase/firestore';
 import { useNavigation } from "@react-navigation/native";
 import { Image } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 const InstructorInsideStHome = ({ id,sid }) => {
     const navigation = useNavigation();
@@ -67,10 +68,15 @@ const InstructorInsideStHome = ({ id,sid }) => {
     
     return (
         <View style={styles.container}>
-        <View style={styles.leftBox}>
-            <Image source={{uri: instPhoto}} style={styles.imageStyle}/>
-            <Text style={styles.txt}>{instName}</Text>
-        </View>
+        {
+            instName ?
+            <View style={styles.leftBox}>
+                <Image source={{uri: instPhoto}} style={styles.imageStyle}/>
+                <Text style={styles.txt}>{instName}</Text>
+            </View>
+            :
+            <ActivityIndicator size={50} color="#0000ff" />
+        }
         <TouchableOpacity style={styles.rightbox} onPress={() => startChat()}>
             <Text style={styles.txt1}>Chat</Text>
         </TouchableOpacity>
