@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border } from "../GlobalStyles";
 import app from '../components/firebase_config'
@@ -19,7 +19,7 @@ const UniversityHome = (p) => {
   const [ eventList, setEventList ] = React.useState([]);
 
   React.useEffect(() => {
-    // geteventdatafrommsg;
+    geteventdatafrommsg();
   }
   ,[]);
 
@@ -50,39 +50,35 @@ const UniversityHome = (p) => {
     });
   }
 
-  const geteventdatafrommsg=async()=>{
+  const geteventdatafrommsg = async () => {
     const docRef = collection(db, "Events");
-        const q = query(docRef, 
-            where("email", "==", id),
-            orderBy("createAt", "asc")
-            );
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
-              const msgs = [];
-              querySnapshot.forEach((doc) => {
-                  msgs.push({
-                      id: doc.id,
-                      ...doc.data()
-                  })
-              })
-              // console.log(msgs);
-              setEventList(msgs);
-          });
-          return () => {
-              unsubscribe();
-          }
-  }
-  console.log('eventlist:',eventList);
+    const q = query(
+      docRef,
+      where("email", "==", id),
+      orderBy("createAt", "asc")
+    );
+    const querySnapshot = await getDocs(q);
+    const msgs = [];
+    querySnapshot.forEach((doc) => {
+      msgs.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+    setEventList(msgs);
+  };
+  console.log('eventlist:', eventList);
   
   const buttonHandler = () => {
     addEvent();
     eventaddmsg();
     geteventdatafrommsg();
   }
-
+  console.log('list: ', eventList);
   return (
     <View style={styles.container}>
       <StatusBar/>
-      <Text style={styles.welcomeUser}>Welcome user</Text>
+      <Text style={styles.welcomeUser}>Welcome</Text>
       <View style={styles.box}>
         <Text style={styles.addtxt}>Add New Event</Text>
         <TextInput
@@ -94,32 +90,45 @@ const UniversityHome = (p) => {
           <Text style={styles.btntxt}>Add Event</Text>
         </TouchableOpacity>
       </View>
-      <BottomBarUniversity page={'UniversityHome'}id={id} />
-    </View>
+      <Text style={styles.previous}>Previous Events: </Text>
+      <ScrollView style={styles.scrollView}>
+        {
+            eventList.length === 0 ?
+            <Text style={styles.noevent}>No events yet</Text>
+            :
+            eventList.reverse().map((item, index) => (
+              <View key={index} style={styles.scrollitems}>
+                <Text style={styles.addtxt}>Event {eventList.length - index}</Text>
+                <Text style={styles.txtbox}>{item.event}</Text>
+              </View>
+            ))
+        }
+      </ScrollView>
+      <BottomBarUniversity page={'UniversityHome'} id={id} />
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fefbe7',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center'
+    flex: 1, // Use flex: 1 to make the container take the entire height
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   welcomeUser: {
-    top: '5%',
+    marginTop: 25, // Adjusted marginTop value
     fontFamily: FontFamily.primaryFontFamily,
     fontSize: 25,
   },
   box: {
-    marginTop: '20%',
+    marginTop: 20, // Adjusted marginTop value
     backgroundColor: '#f9ebc8',
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
     borderRadius: 15,
-    padding: 10
+    padding: 10,
   },
   addtxt: {
     fontSize: 20,
@@ -140,10 +149,29 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
   },
   btntxt: {
     fontSize: 20,
+  },
+  scrollView: {
+    flex: 1, // Allow the ScrollView to take the remaining space
+    width: '100%',
+    marginBottom: 85,
+    marginTop: 5
+  },
+  scrollitems: {
+    marginLeft: 20,
+    marginTop: 5,
+  },
+  previous: {
+    marginTop: 5,
+    fontSize: 18
+  },
+  noevent: {
+    fontSize: 20,
+    marginLeft: 20,
+    marginTop: 10
   }
 });
 
