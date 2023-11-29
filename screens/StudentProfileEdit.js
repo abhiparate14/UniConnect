@@ -98,7 +98,7 @@ const StudentProfileEdit = (p) => {
     "age": age,
     "username": username,
     "dob": dob,
-    "photo":"gs://notes-app-44.appspot.com/"+id,
+    "photo":tempImage,
   });
   }
   // image change section
@@ -165,9 +165,10 @@ const StudentProfileEdit = (p) => {
   //send data to firabase ends
 
   const beforeNavigation = async() => {
-    await updateData();
-    await uploadMedia();
-    console.log("hi");
+    await updateData().then(()=>{
+      uploadMedia();
+    });
+    // console.log("hi");
     setImageStatus(false);
     navigation.navigate("StudentProfile",{id: id});
   }

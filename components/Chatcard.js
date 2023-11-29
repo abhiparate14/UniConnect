@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   left_align: {
     // width: '90%',
     flexDirection: 'row',
+    marginLeft: 10
   },
   right_align:{
     // width: '90%',
@@ -54,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
     borderRadius: 20,
-    // width: '90%',
   },
   nonuser:{
     padding: 10,
@@ -63,8 +63,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
     borderRadius: 20,
-    // marginTop: 10,
-    width: '90%',
   },
   logo_left: {
     height: 35,

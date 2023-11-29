@@ -13,7 +13,10 @@ const StudentChatScreen = (p) => {
   const StudentEmail = p.route.params.StudentEmail;
   const InstructorEmail = p.route.params.InstructorEmail;
   const InstructorName = p.route.params.InstructorName;
+  const user = p.route.params.user;
   const [studentName,setStudentName] = useState('');
+  const [ studentImage,setStudentImage ] = useState('');
+  const [ instructorImage,setInstructorImage ] = useState('');
   const roomname = StudentEmail+InstructorEmail;
   // console.log('roomname: ' + roomname);
   // console.log('instructor email: ' + InstructorEmail);
@@ -29,12 +32,12 @@ const StudentChatScreen = (p) => {
       () => {
         async function getUserData(){
           const db = getFirestore(app);
-          const docRef = doc(db, "student", StudentEmail);
+          const docRef = doc(db, "instructor", InstructorEmail);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+            // console.log("Document data:", docSnap.data());
             // StudentName = docSnap.data().username
-            setStudentName(docSnap.data().username);
+            setInstructorImage(docSnap.data().photo);
             // alert(`Your name is ${docSnap.data().email}`);
           } else {
             // doc.data() will be undefined in this case
@@ -45,6 +48,26 @@ const StudentChatScreen = (p) => {
         getUserData();
   },[])
 
+  useEffect(
+    () => {
+      async function getUserData(){
+        const db = getFirestore(app);
+        const docRef = doc(db, "student", StudentEmail);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          // console.log("Document data:", docSnap.data());
+          // StudentName = docSnap.data().username
+          setStudentName(docSnap.data().username);
+          setStudentImage(docSnap.data().photo);
+          // alert(`Your name is ${docSnap.data().email}`);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("Invalid User !!!");
+          alert("Invalid User !!!");
+        }
+      }
+      getUserData();
+},[])
 
 // ye msg laane ke liye hai
     useEffect(() => {
@@ -77,15 +100,29 @@ const StudentChatScreen = (p) => {
             alert('Please enter a message');
             return;
         }
-        await addDoc(collection(db, "Msg"), 
-        {
-            username: studentName,
-            roomname: roomname,
-            message: newmsg,
-            createdAt: serverTimestamp(),
-            profile_pic: 'https://images.pexels.com/photos/1036642/pexels-photo-1036642.jpeg?auto=compress&cs=tinysrgb&w=600'
-        });
-        setNewmsg('');
+        if (user == 'student'){
+          await addDoc(collection(db, "Msg"), 
+          {
+              username: studentName,
+              roomname: roomname,
+              message: newmsg,
+              createdAt: serverTimestamp(),
+              profile_pic: studentImage
+          });
+          setNewmsg('');
+        }
+        if (user == 'instructor'){
+          console.log('inside inst');
+          await addDoc(collection(db, "Msg"), 
+          {
+              username: InstructorName,
+              roomname: roomname,
+              message: newmsg,
+              createdAt: serverTimestamp(),
+              profile_pic: instructorImage
+          });
+          setNewmsg('');
+        }
     }
   // experimental
 
@@ -93,11 +130,21 @@ const StudentChatScreen = (p) => {
   return (
     <View style={styles.container}>
       <StatusBar/>
-      <Topbar page={InstructorName} id={StudentEmail}/>
+      {
+        user == 'student' ?
+        <Topbar page={InstructorName} id={StudentEmail}/>
+        :
+        <Topbar page={studentName} id={InstructorEmail}/>
+      }
       <ScrollView style={styles.scroll}>
      {
+        user == 'student' ?
         chat.map((message) => {
             return <Chatcard key={d.getTime} message={message} username={studentName}/>
+        })
+        :
+        chat.map((message) => {
+            return <Chatcard key={d.getTime} message={message} username={InstructorName}/>
         })
       }
      </ScrollView>

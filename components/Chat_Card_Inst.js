@@ -5,16 +5,15 @@ import { useNavigation } from "@react-navigation/native";
 import app from './firebase_config';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
-const Chat_Card = ({studentEmail,chat}) => {
+const Chat_Card_Inst = ({ studentEmail, instructorEmail, instructorNameMy }) => {
     const navigation = useNavigation();
-    const instructerEmail=chat;
     const [instructerName,setInstructerName] = useState('');
 
     React.useEffect(
         () => {
           async function getUserData(){
             const db = getFirestore(app);
-            const docRef = doc(db, "instructor", instructerEmail);
+            const docRef = doc(db, "student", studentEmail);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
               // console.log("Document data:", docSnap.data());
@@ -30,18 +29,16 @@ const Chat_Card = ({studentEmail,chat}) => {
           getUserData();
     },[])
 
-    // console.log(instructerName);
-    
   return (
     <View style={styles.chatacard}>
       
       <TouchableOpacity 
         style={styles.to}
-        onPress={() =>navigation.navigate('StudentChatScreen',{
-          StudentEmail:studentEmail,
-          InstructorEmail:instructerEmail,
-          InstructorName:instructerName, 
-          user:'student'
+        onPress={() =>navigation.navigate('StudentChatScreen',{ 
+            StudentEmail: studentEmail, 
+            InstructorEmail: instructorEmail, 
+            InstructorName: instructorNameMy, 
+            user:'instructor' 
         })}
       >
         {
@@ -56,7 +53,7 @@ const Chat_Card = ({studentEmail,chat}) => {
   )
 }
 
-export default Chat_Card
+export default Chat_Card_Inst
 
 const styles = StyleSheet.create({
     chatacard   : {
