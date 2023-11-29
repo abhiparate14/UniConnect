@@ -107,8 +107,11 @@ const RegistrationCommon = () => {
 
   const navigatetoanotherpage = (x) => {
     // printDetails();
-    createNewUser(emailtext, passwordtext);
-    sendData();
+    createNewUser(emailtext, passwordtext).then(()=>{
+      sendData().then(()=>{
+        console.log("data sent");
+      });
+    });
     if (valueDropDown == 'student') {
       myPageName = 'StudentLogin';
       navigation.navigate(myPageName,{id:emailtext});

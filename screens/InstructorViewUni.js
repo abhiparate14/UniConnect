@@ -68,6 +68,7 @@ const InstructorViewUni = (p) => {
     if (type == 'student'){
       myPrefer();
     }
+    alert('University Added');
   }
 
 

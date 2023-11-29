@@ -156,11 +156,11 @@ const StudentProfileEdit = (p) => {
 
   const beforeNavigation = async() => {
     await uploadMedia().then(async()=>{
-    await updateData().then(()=>{
+    await updateData().then(async()=>{
               navigation.navigate("StudentProfile",{id: id});
+              setImageStatus(false);
             });
           });
-          setImageStatus(false);
   }
   // console.log('image: ' + image)
 

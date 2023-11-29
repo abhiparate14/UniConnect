@@ -1,7 +1,7 @@
 import * as React                         from "react";
 import {  StyleSheet, View, Text }        from "react-native";
 import { Image }                          from "expo-image";
-import { useNavigation }                  from "@react-navigation/native";
+import { useFocusEffect, useNavigation }  from "@react-navigation/native";
 import { getFirestore ,getDoc ,doc}       from 'firebase/firestore';
 import { ref ,getStorage,getDownloadURL}  from "firebase/storage";
 import { StatusBar }                      from "expo-status-bar";
@@ -23,27 +23,27 @@ const StudentProfile = (p) => {
   const [ dob, setDob ] = React.useState('Date of Birth');
   const [profilepic,setProfilepic]=React.useState('');
 
-  React.useEffect(
-    () => {
-      async function getUserData(){
-        const db = getFirestore(app);
-        const docRef = doc(db, "student", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUsername(docSnap.data().username);
-          setAge(docSnap.data().age);
-          setDob(docSnap.data().dob);
-          setProfilepic(docSnap.data().photo);
-        } 
-        else {
-          // doc.data() will be undefined in this case
-          console.log("Invalid User !!!");
-          alert("Invalid User !!!");
-        }
-      }
+  async function getUserData(){
+    const db = getFirestore(app);
+    const docRef = doc(db, "student", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setUsername(docSnap.data().username);
+      setAge(docSnap.data().age);
+      setDob(docSnap.data().dob);
+      setProfilepic(docSnap.data().photo);
+    } 
+    else {
+      // doc.data() will be undefined in this case
+      console.log("Invalid User !!!");
+      alert("Invalid User !!!");
+    }
+  }
+  useFocusEffect(
+      ()=>{
       getUserData();
-// firebase code ends
-  },[]);
+    }
+  );
 //firebase code to retrive information ends
 
   return (

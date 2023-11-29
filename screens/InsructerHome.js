@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, StyleSheet, View, ScrollView, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Color, FontSize, FontFamily } from "../GlobalStyles";
 import app from "../components/firebase_config";
 import { collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
@@ -15,37 +15,21 @@ const InsructerHome = (p) => {
   const iid = p.route.params.id;
   const db = getFirestore(app);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "university"));
-      const data = [];
-      querySnapshot.forEach((doc) => {
-        data.push(doc.data());
-      });
-      setUniversityData(data);
-    };
-    
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    const querySnapshot = await getDocs(collection(db, "university"));
+    const data = [];
+    querySnapshot.forEach((doc) => {
+      data.push(doc.data());
+    });
+    setUniversityData(data);
+  };
+  
 
-//   React.useEffect(
-//     () => {
-//       async function getUserData(){
-//         const db = getFirestore(app);
-//         const docRef = doc(db, "instructor", iid);
-//         const docSnap = await getDoc(docRef);
-//         if (docSnap.exists()) {
-//           console.log("Document data:", docSnap.data());
-//           // console.log(docSnap.data());
-          
-//         } else {
-//           // doc.data() will be undefined in this case
-//           console.log("Invalid User !!!");
-//           // alert("Invalid User !!!");
-//         }
-//       }
-//       getUserData();
-// },[])
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+  },[])
+  );
 
 
   return (

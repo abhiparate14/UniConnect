@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Color } from "../GlobalStyles";
 import { app } from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
 import { ScrollView } from "react-native-gesture-handler";
-import { useEffect } from "react";
 import BottomBarStudent from "../components/BottomBarStudent";
 import StudentHomeUniCard from "../components/StudentHomeUniCard";
 
@@ -29,10 +28,11 @@ const StudentHome = (p) => {
     }
   }
 
-  useEffect(
-    () => {
+  useFocusEffect(
+    React.useCallback(() => {
       getUserData();
-  },[]);
+  },[])
+  );
 
 
 
@@ -44,11 +44,15 @@ const StudentHome = (p) => {
       </View>
       <ScrollView style={styles.scrollview}>
       {
+        mypref.length>0?
         mypref.map((uni) => {
           return (
             <StudentHomeUniCard uni_id={uni} sid={id}/>
           );
         })
+        :
+        <View style={{flexDirection: "column",justifyContent: 'center',alignItems: 'center',height: '100%',width: "100%"}}>
+          <Text style={{fontSize: 25}}>No University Added</Text></View>
       }
       </ScrollView>
       <BottomBarStudent page={'StudentHome'} id={id}/>
