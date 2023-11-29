@@ -20,7 +20,7 @@ const StudentProfileEdit = (p) => {
   const [ image, setImage ] = React.useState(null);
   const [ tempImage, setTempImage ] = React.useState(null);
   const [ imageStatus, setImageStatus ] = React.useState(false);
-  // const [ uploading, setUploading ] = React.useState(false);
+  const [ uploading, setUploading ] = React.useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const storage = getStorage(app);
   const gsReference = ref(storage, 'gs://notes-app-44.appspot.com/'+id);
@@ -29,7 +29,7 @@ const StudentProfileEdit = (p) => {
 
   getDownloadURL(ref(storage, gsReference))
   .then((url) => {
-  console.log("Profilepic:" + url);
+  // console.log("Profilepic:" + url);
   setTempImage(url);
   })
 
@@ -104,7 +104,7 @@ const StudentProfileEdit = (p) => {
     });
     if(!result.canceled) {
       setImage(result.assets[0].uri);
-      console.log("image is: " + image);
+      // console.log("image is: " + image);
     }
     else{
       setImageStatus(false)
@@ -129,7 +129,7 @@ const StudentProfileEdit = (p) => {
         xhr.send(null);
       })
       const filename = id;
-      console.log(filename);
+      // console.log(filename);
       const storage = getStorage(app);
       const photoRef = ref(storage, filename);
       await uploadBytes(photoRef, blob).then((snapshot) => {
@@ -155,12 +155,12 @@ const StudentProfileEdit = (p) => {
   //send data to firabase ends
 
   const beforeNavigation = async() => {
+    await uploadMedia().then(async()=>{
     await updateData().then(()=>{
-      uploadMedia().then(()=>{
-        navigation.navigate("StudentProfile",{id: id});
-      });
-    });
-    setImageStatus(false);
+              navigation.navigate("StudentProfile",{id: id});
+            });
+          });
+          setImageStatus(false);
   }
   // console.log('image: ' + image)
 

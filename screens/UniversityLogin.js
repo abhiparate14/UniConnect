@@ -8,7 +8,8 @@ import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import { StatusBar } from "expo-status-bar";
 
 const UniversityLogin = () => {
-  const navigation = useNavigation();const [username, setUsername] = React.useState('');
+  const navigation = useNavigation();
+  const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isError, setError] = React.useState(false);
 
@@ -31,7 +32,7 @@ const UniversityLogin = () => {
     });
     if(!isError){
       // notification();
-      navigation.navigate("UniversityHome");
+      navigation.navigate("UniversityHome", {id: username});
     }
     
   }
@@ -41,7 +42,7 @@ const UniversityLogin = () => {
     const docRef = doc(db, "university", username);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      // console.log("Document data:", docSnap.data());
       signInUser(username,password);
       // alert(`Your name is ${docSnap.data().email}`);
     } else {
@@ -60,9 +61,6 @@ const UniversityLogin = () => {
     setPassword(password);
   }
 
-  const printDetails = () => {
-    console.log("Username: "+username+"\n"+"Password:"+password);
-  }
 
   const beforeNavigation = () => {
     // printDetails();

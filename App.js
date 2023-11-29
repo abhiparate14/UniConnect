@@ -3,8 +3,6 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import LANDINGPAGE from "./screens/LANDINGPAGE";
-import UniversityExtraInfo from "./screens/UniversityExtraInfo";
-import InstructerExtraInfo from "./screens/InstructerExtraInfo";
 import StudentInfo from "./screens/StudentInfo";
 import InstructerInfo from "./screens/InstructerInfo";
 import UniversityInfo from "./screens/UniversityInfo";
@@ -30,6 +28,7 @@ import StudentChatScreen from './screens/StudentChatScreen'
 import StudentProfileSettings from "./screens/StudentProfileSettings";
 import UniversityProfileSettings from './screens/UniversityProfileSettings';
 import InstructorViewUni from './screens/InstructorViewUni';
+import InstructorProfileSettings from './screens/InstructorProfileSettings';
 import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -99,16 +98,6 @@ const App = () => {
                 <Stack.Screen
                   name="LANDINGPAGE"
                   component={LANDINGPAGE}
-                  options={{ headerShown: false, animation: 'slide_from_right'}}
-                />
-                <Stack.Screen
-                  name="UniversityExtraInfo"
-                  component={UniversityExtraInfo}
-                  options={{ headerShown: false, animation: 'slide_from_right'}}
-                />
-                <Stack.Screen
-                  name="InstructerExtraInfo"
-                  component={InstructerExtraInfo}
                   options={{ headerShown: false, animation: 'slide_from_right'}}
                 />
                 <Stack.Screen
@@ -234,6 +223,11 @@ const App = () => {
                 <Stack.Screen
                   name="InstructorViewUni"
                   component={InstructorViewUni}
+                  options={{ headerShown: false, animation: 'slide_from_right'}}
+                />
+                <Stack.Screen
+                  name="InstructorProfileSettings"
+                  component={InstructorProfileSettings}
                   options={{ headerShown: false, animation: 'slide_from_right'}}
                 />
               </Stack.Navigator>

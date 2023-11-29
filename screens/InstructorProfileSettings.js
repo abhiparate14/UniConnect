@@ -5,10 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import app from '../components/firebase_config';
 import { getAuth, signOut } from 'firebase/auth'
 
-const StudentProfileSettings = (p) => {
+const InstructorProfileSettings = (p) => {
     const navigation = useNavigation();
     const id=p.route.params.id;
-
     const beforeLogOut = () => {
         const auth = getAuth(app)
         signOut(auth).then(
@@ -16,12 +15,11 @@ const StudentProfileSettings = (p) => {
             navigation.navigate('LANDINGPAGE')
         )
     }
-
   return (
     <View style={styles.container}>
         <TouchableOpacity 
             style={styles.back}
-            onPress={() => navigation.navigate('StudentProfile', {id: id.id})}
+            onPress={() => navigation.navigate('InsructerDetails', {id: id.id})}
         >
                 <Ionicons name="arrow-back-sharp" size={24} color="black" />
                 <Text style={styles.backTxt}>Back</Text>
@@ -29,7 +27,7 @@ const StudentProfileSettings = (p) => {
         <View style={styles.menuItems}>
             <TouchableOpacity 
                 style={styles.menuItem1} 
-                onPress={() => navigation.navigate("StudentProfileEdit", {id: id.id})}
+                onPress={() => navigation.navigate("InsructerEdit", {id: id.id})}
             >
                 <Text style={styles.menuTxt}>Edit Profile</Text>
             </TouchableOpacity>
@@ -41,7 +39,7 @@ const StudentProfileSettings = (p) => {
   )
 }
 
-export default StudentProfileSettings
+export default InstructorProfileSettings
 
 const styles = StyleSheet.create({
     container: {

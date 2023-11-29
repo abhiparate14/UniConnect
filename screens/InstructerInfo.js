@@ -27,6 +27,7 @@ const InstructerInfo = (p) => {
         educationDetails: educationDetails,
         contactNo: contactNo,
         branch: branch,
+        MyUniversitys: [],
       };
       // Update document in intructer collection
       const docRef = doc(db, 'instructor', id);

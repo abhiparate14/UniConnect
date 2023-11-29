@@ -60,7 +60,8 @@ const RegistrationCommon = () => {
         dob: selectedDate,
         type: valueDropDown,
         photo: "https://firebasestorage.googleapis.com/v0/b/notes-app-44.appspot.com/o/stock_image.png?alt=media&token=905bd8fd-1fae-4728-8069-803c666294b0",
-        events: ''
+        MyPreference: [],
+        chatwith: [],
       });
     }
 

@@ -81,6 +81,7 @@ const InsructerChat = (p) => {
             />
           ))}
       </ScrollView>
+      <InstructorBottomBar page={'InsructerChat'} id={id}/>
     </View>
   );
 };

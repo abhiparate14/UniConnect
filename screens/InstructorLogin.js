@@ -32,7 +32,7 @@ const InstructorLogin = () => {
       });
       if(!isError){
         // notification();
-        navigation.navigate("InsructerHome");
+        navigation.navigate("InsructerHome", {id:username});
       }
       
     }
@@ -42,7 +42,7 @@ const InstructorLogin = () => {
       const docRef = doc(db, "instructor", username);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
+        // console.log("Document data:", docSnap.data());
         signInUser(username,password);
         // alert(`Your name is ${docSnap.data().email}`);
       } else {
@@ -59,10 +59,6 @@ const InstructorLogin = () => {
 
   const passwordTextHandler = (password) => {
     setPassword(password);
-  }
-
-  const printDetails = () => {
-    console.log("Username: "+username+"\n"+"Password:"+password);
   }
 
   const beforeNavigation = () => {

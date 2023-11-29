@@ -42,7 +42,7 @@ const StudentLogin = () => {
     const docRef = doc(db, "student", username);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      // console.log("Document data:", docSnap.data());
       signInUser(username,password);
       
       // alert(`Your name is ${docSnap.data().email}`);
@@ -62,9 +62,6 @@ const StudentLogin = () => {
     setPassword(password);
   }
 
-  const printDetails = () => {
-    console.log("Username: "+username+"\n"+"Password:"+password);
-  }
 
   const beforeNavigation = () => {
     // printDetails();

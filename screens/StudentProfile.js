@@ -22,14 +22,7 @@ const StudentProfile = (p) => {
   const [ age, setAge ] = React.useState('Age');
   const [ dob, setDob ] = React.useState('Date of Birth');
   const [profilepic,setProfilepic]=React.useState('');
-  const storage = getStorage(app);
-  const gsReference = ref(storage, 'gs://notes-app-44.appspot.com/'+id);
-  
-  getDownloadURL(ref(storage, gsReference))
-  .then((url) => {
-  setProfilepic(url)
-  })
-  //firebase code to retrive information starts
+
   React.useEffect(
     () => {
       async function getUserData(){
@@ -40,7 +33,7 @@ const StudentProfile = (p) => {
           setUsername(docSnap.data().username);
           setAge(docSnap.data().age);
           setDob(docSnap.data().dob);
-          setProfilepic(docSnap.data().profilepic);
+          setProfilepic(docSnap.data().photo);
         } 
         else {
           // doc.data() will be undefined in this case

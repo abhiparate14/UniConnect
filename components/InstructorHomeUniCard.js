@@ -6,7 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 
 const InstructorHomeUniCard = ({ myid, image, username, address, id }) => {
     const navigation = useNavigation();
-    console.log('myid:'+ myid);
   return (
     <View style={styles.container}>
         <View style={styles.usercard}>

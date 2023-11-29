@@ -30,6 +30,7 @@ const UniversityInfo = (p) => {
         contact_email: email,
         city: city,
         MyInstructors: [],
+        events: '',
       };
       // Update document in university collection
       const docRef = doc(db, 'university', id);
