@@ -5,7 +5,6 @@ import { useFonts } from "expo-font";
 import LANDINGPAGE from "./screens/LANDINGPAGE";
 import UniversityExtraInfo from "./screens/UniversityExtraInfo";
 import InstructerExtraInfo from "./screens/InstructerExtraInfo";
-import StudentExtraInfo from "./screens/StudentExtraInfo";
 import StudentInfo from "./screens/StudentInfo";
 import InstructerInfo from "./screens/InstructerInfo";
 import UniversityInfo from "./screens/UniversityInfo";
@@ -22,7 +21,6 @@ import InsructerChat from "./screens/InsructerChat";
 import InsructerHome from "./screens/InsructerHome";
 import StLdCollege from "./screens/StLdCollege";
 import StGanpatUniversity from "./screens/StGanpatUniversity";
-import StudentSearchResult from "./screens/StudentSearchResult";
 import StudentProfile from "./screens/StudentProfile";
 import StudentProfileEdit from "./screens/StudentProfileEdit";
 import StudentChat from "./screens/StudentChat";
@@ -114,11 +112,6 @@ const App = () => {
                   options={{ headerShown: false, animation: 'slide_from_right'}}
                 />
                 <Stack.Screen
-                  name="StudentExtraInfo"
-                  component={StudentExtraInfo}
-                  options={{ headerShown: false, animation: 'slide_from_right'}}
-                />
-                <Stack.Screen
                   name="StudentInfo"
                   component={StudentInfo}
                   options={{ headerShown: false, animation: 'slide_from_right'}}
@@ -196,11 +189,6 @@ const App = () => {
                 <Stack.Screen
                   name="StGanpatUniversity"
                   component={StGanpatUniversity}
-                  options={{ headerShown: false, animation: 'slide_from_right'}}
-                />
-                <Stack.Screen
-                  name="StudentSearchResult"
-                  component={StudentSearchResult}
                   options={{ headerShown: false, animation: 'slide_from_right'}}
                 />
                 <Stack.Screen

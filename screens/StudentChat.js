@@ -27,7 +27,6 @@ const StudentChat = (p) => {
     }
     getUserData();
   }, []);
-
   React.useEffect(() => {
     async function getInstructorData(email) {
       const docRef = doc(db, "instructor", email);
@@ -59,21 +58,21 @@ const StudentChat = (p) => {
         />
       </View>
       <ScrollView style={styles.container}>
-        {instructorData
-          .filter((instructor) => {
+        {
+          instructorData.filter((instructor) => {
             if (keyword === "") {
               return true;
             } else if (instructor.username.toLowerCase().includes(keyword.toLowerCase())) {
               return true;
             }
             return false;
-          })
-          .map((instructor) => (
-            <Chat_Card // Adjust the key according to your data
+          }).map((instructor) => (
+            <Chat_Card
               studentEmail={id}
               chat={instructor.email}
             />
-          ))}
+          ))
+        }
       </ScrollView>
       <BottomBarStudent page={'StudentChat'} id={id} />
     </View>

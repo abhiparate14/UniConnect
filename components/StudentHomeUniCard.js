@@ -6,15 +6,17 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import InstructorInsideStHome from './InstructorInsideStHome';
 import { ScrollView } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import { Foundation } from '@expo/vector-icons';
 
 const StudentHomeUniCard = ({ uni_id ,sid}) => {
     const navigation = useNavigation();
-    const db = getFirestore(app);
     const [ uniPhoto,setUniPhoto ] = useState('');
     const [ uniName,setUniName ] = useState('');
     const [ uniLocation,setUniLocation ] = useState('');
     const [ uniInstructors,setUniInstructors ] = useState([]);
-    const [ btnPress,setBtnPress ] = useState(false)
+    const [ btnPress,setBtnPress ] = useState(false);
+    const [ events,setEvents ] = useState('');
 
     React.useEffect(
         () => {
@@ -27,49 +29,64 @@ const StudentHomeUniCard = ({ uni_id ,sid}) => {
               setUniName(docSnap.data().username);
               setUniLocation(docSnap.data().address);
               setUniInstructors(docSnap.data().MyInstructors);
+              setEvents(docSnap.data().events);
             } 
             else {
-              // doc.data() will be undefined in this case
               console.log("Invalid User !!!");
               alert("Invalid User !!!");
             }
           }
           getUserData();
-    // firebase code ends
     },[]);
 
   return (
     <View style={styles.container}>
-        <Image source={{uri: uniPhoto}} style={styles.image} />
-        <View style={styles.bottomBox}>
-            <View style={styles.text}>
-                <Text style={styles.uniTxt}>{uniName}</Text>
-                <Text style={styles.locTxt}>{uniLocation}</Text>
-            </View>
-            <TouchableOpacity onPress={() => setBtnPress(!btnPress)}>
-                <View style={styles.exploreBox}>
-                    <Text style={styles.exploretxt}>Instructors</Text>
-                    {
-                        btnPress ? 
-                        <AntDesign name="caretup" size={24} color="black" /> :
-                        <AntDesign name="caretdown" size={24} color="black" />
-                    }
-                </View>
-            </TouchableOpacity>
-        </View>
         {
-            btnPress ?
-            <ScrollView>
+            uniPhoto ?
+            <View>
+                <Image source={{uri: uniPhoto}} style={styles.image} />
+                <View style={styles.bottomBox}>
+                    <View style={styles.text}>
+                        <Text style={styles.uniTxt}>{uniName}</Text>
+                        <Text style={styles.locTxt}>{uniLocation}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => setBtnPress(!btnPress)}>
+                        <View style={styles.exploreBox}>
+                            <Text style={styles.exploretxt}>Instructors</Text>
+                            {
+                                btnPress ? 
+                                <AntDesign name="caretup" size={24} color="black" /> 
+                                :
+                                <AntDesign name="caretdown" size={24} color="black" />
+                            }
+                        </View>
+                    </TouchableOpacity>
+                </View>
                 {
-                    uniInstructors.map((items) => {
-                        return <InstructorInsideStHome id={items} sid={sid}/>
-                    })
+                    events == '' ?
+                    null
+                    :
+                    <View style={styles.events}>
+                        <Foundation name="alert" size={24} color="black" />
+                        <Text style={styles.eventtxt}>{events}</Text>
+                    </View>
                 }
-            </ScrollView>
+                {
+                    btnPress ?
+                    <ScrollView>
+                        {
+                            uniInstructors.map((items) => {
+                                return <InstructorInsideStHome id={items} sid={sid}/>
+                            })
+                        }
+                    </ScrollView>
+                    :
+                    null
+                }
+            </View>
             :
-            null
+            <ActivityIndicator size={50} color="#0000ff" />
         }
-        
     </View>
   )
 }
@@ -96,7 +113,7 @@ const styles = StyleSheet.create({
     bottomBox: {
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'space-between', // Added this line
+        justifyContent: 'space-between',
     },
     text: {
         flexDirection: 'column',
@@ -133,13 +150,29 @@ const styles = StyleSheet.create({
     scroll: {
         width: '100%',
         backgroundColor: '#f9ebc8',
-        // borderRadius: 5,
-        // borderWidth: 1,
-        // borderColor: 'black',
         marginRight: 10,
         marginBottom: 10,
         marginTop: 10,
-        // flexDirection: 'row',
         padding: 10
+    },
+    events:{
+        backgroundColor: '#f9ebc8',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'black',
+        marginBottom: 10,
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        marginTop: 10,
+        flexDirection: 'row',
+        padding: 10,
+        width: '90%',
+        marginHorizontal: 15,
+
+    },
+    eventtxt: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginRight: 5
     }
 })

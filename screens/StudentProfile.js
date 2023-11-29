@@ -1,19 +1,18 @@
-import * as React from "react";
-import {  Pressable,  StyleSheet,  View,  ImageBackground,  Text,  TouchableOpacity,} from "react-native";
-import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
-import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-import {app} from '../components/firebase_config';
-import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
-import { ref ,getStorage,getDownloadURL} from "firebase/storage";
-import BottomBarStudent from "../components/BottomBarStudent";
-import StudentProfileTopbar from "../components/StudentProfileTopbar";
-import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
+import * as React                         from "react";
+import {  StyleSheet, View, Text }        from "react-native";
+import { Image }                          from "expo-image";
+import { useNavigation }                  from "@react-navigation/native";
+import { getFirestore ,getDoc ,doc}       from 'firebase/firestore';
+import { ref ,getStorage,getDownloadURL}  from "firebase/storage";
+import { StatusBar }                      from "expo-status-bar";
+import { ActivityIndicator }              from "react-native";
+import { MaterialCommunityIcons }         from '@expo/vector-icons';
+import { AntDesign }                      from '@expo/vector-icons';
+import { MaterialIcons }                  from '@expo/vector-icons';
+import { Fontisto }                       from '@expo/vector-icons';
+import { app }                            from '../components/firebase_config';
+import StudentProfileTopbar               from "../components/StudentProfileTopbar";
+import BottomBarStudent                   from "../components/BottomBarStudent";
 
 
 const StudentProfile = (p) => {
@@ -28,7 +27,6 @@ const StudentProfile = (p) => {
   
   getDownloadURL(ref(storage, gsReference))
   .then((url) => {
-  // console.log("Profilepic:" + url);
   setProfilepic(url)
   })
   //firebase code to retrive information starts
@@ -39,12 +37,10 @@ const StudentProfile = (p) => {
         const docRef = doc(db, "student", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          // console.log("Document data:", docSnap.data());
           setUsername(docSnap.data().username);
           setAge(docSnap.data().age);
           setDob(docSnap.data().dob);
           setProfilepic(docSnap.data().profilepic);
-          // alert(`Your name is ${docSnap.data().email}`);
         } 
         else {
           // doc.data() will be undefined in this case
@@ -54,7 +50,7 @@ const StudentProfile = (p) => {
       }
       getUserData();
 // firebase code ends
-},[]);
+  },[]);
 //firebase code to retrive information ends
 
   return (

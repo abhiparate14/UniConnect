@@ -5,9 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 import app from './firebase_config';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
-const Chat_Card = ({studentEmail,chat}) => {
+const Chat_Card = ({ studentEmail, chat }) => {
     const navigation = useNavigation();
-    const instructerEmail=chat;
+    const instructerEmail = chat;
     const [instructerName,setInstructerName] = useState('');
 
     React.useEffect(
@@ -17,20 +17,14 @@ const Chat_Card = ({studentEmail,chat}) => {
             const docRef = doc(db, "instructor", instructerEmail);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-              // console.log("Document data:", docSnap.data());
-              // StudentName = docSnap.data().username
               setInstructerName(docSnap.data().username);
-              // alert(`Your name is ${docSnap.data().email}`);
             } else {
-              // doc.data() will be undefined in this case
               console.log("Invalid User !!!");
               alert("Invalid User !!!");
             }
           }
           getUserData();
     },[])
-
-    // console.log(instructerName);
     
   return (
     <View style={styles.chatacard}>
@@ -80,7 +74,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     username: {
-        // color: 'white',
         fontSize: 20,
         fontWeight: 'bold'
     },

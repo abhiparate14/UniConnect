@@ -20,7 +20,7 @@ const StudentProfileEdit = (p) => {
   const [ image, setImage ] = React.useState(null);
   const [ tempImage, setTempImage ] = React.useState(null);
   const [ imageStatus, setImageStatus ] = React.useState(false);
-  const [ uploading, setUploading ] = React.useState(false);
+  // const [ uploading, setUploading ] = React.useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const storage = getStorage(app);
   const gsReference = ref(storage, 'gs://notes-app-44.appspot.com/'+id);
@@ -67,7 +67,6 @@ const StudentProfileEdit = (p) => {
     //firebase code to retrive information starts
     React.useEffect(
       () => {
-        console.log('i was called')
         async function getUserData(){
           const docRef = doc(db, "student", id);
           const docSnap = await getDoc(docRef);
@@ -77,19 +76,13 @@ const StudentProfileEdit = (p) => {
             setAge(docSnap.data().age);
             setDob(docSnap.data().dob);
             setTempImage(docSnap.data().photo)
-            // alert(`Your name is ${docSnap.data().email}`);
           } else {
-            // doc.data() will be undefined in this case
             console.log("Invalid User !!!");
             alert("Invalid User !!!");
           }
         }
         getUserData();
       },[]);
-      
-  // firebase code ends
-  //firebase code to retrive information ends
-  //send data to firebase starts
 
   async function updateData(){
     const docRef = doc(db, "student", id);
@@ -101,7 +94,6 @@ const StudentProfileEdit = (p) => {
     "photo":tempImage,
   });
   }
-  // image change section
 
   const pickImage = async() => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -140,9 +132,7 @@ const StudentProfileEdit = (p) => {
       console.log(filename);
       const storage = getStorage(app);
       const photoRef = ref(storage, filename);
-      // await photoRef.put(blob);
       await uploadBytes(photoRef, blob).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
       });
       setUploading(false);
       alert('Photo Uploaded!!!');
@@ -166,13 +156,13 @@ const StudentProfileEdit = (p) => {
 
   const beforeNavigation = async() => {
     await updateData().then(()=>{
-      uploadMedia();
+      uploadMedia().then(()=>{
+        navigation.navigate("StudentProfile",{id: id});
+      });
     });
-    // console.log("hi");
     setImageStatus(false);
-    navigation.navigate("StudentProfile",{id: id});
   }
-  console.log('image: ' + image)
+  // console.log('image: ' + image)
 
 
 

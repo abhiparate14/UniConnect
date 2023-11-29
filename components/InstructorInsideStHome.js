@@ -22,7 +22,6 @@ const InstructorInsideStHome = ({ id,sid }) => {
               setInstName(docSnap.data().username);
             } 
             else {
-              // doc.data() will be undefined in this case
               console.log("Invalid User !!!");
               alert("Invalid User !!!");
             }
@@ -32,28 +31,24 @@ const InstructorInsideStHome = ({ id,sid }) => {
     
     const addstudentnameininstructor = async () => {
         try {
-            // const db = getFirestore(app);
             const docRef = doc(db, "instructor", id);
             await updateDoc(docRef, {
                 chatwith: arrayUnion(sid),
             });
-            console.log("instructor updated!");
+            // console.log("instructor updated!");
         } catch (error) {
-            // The document probably doesn't exist.
             console.error("Error updating document: ", error);
         }
     };
     
     const addinstructornameinstudent = async () =>{
         try {
-            // const db = getFirestore(app);
             const docRef = doc(db, "student", sid);
             await updateDoc(docRef, {
                 chatwith: arrayUnion(id),
             });
-            console.log("student updated!");
+            // console.log("student updated!");
         } catch (error) {
-            // The document probably doesn't exist.
             console.error("Error updating document: ", error);
         }
         
@@ -110,7 +105,6 @@ const styles = StyleSheet.create({
     txt:{
         marginLeft: 20,
         fontSize: 20,
-        // fontWeight: 'bold',
         color: 'black'
     },
     leftBox:{

@@ -1,14 +1,14 @@
 import * as React from "react";
-import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { Color } from "../GlobalStyles";
+import { ScrollView } from "react-native-gesture-handler";
 import app from "../components/firebase_config";
-import { getFirestore ,getDocs ,doc, collection, updateDoc, arrayUnion} from 'firebase/firestore';
+import { getFirestore ,getDocs , collection} from 'firebase/firestore';
 import BottomBarStudent from "../components/BottomBarStudent";
 import ExploreCard from "../components/ExploreCard";
 import { TextInput } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 const StudentSearch = (p) => {
   const navigation = useNavigation();
@@ -26,7 +26,6 @@ const StudentSearch = (p) => {
         universitys.push(doc.data());
       });
       if (universitys.length > 0) {
-        // console.log("universitys:", universitys);
         setUniversity(universitys);
       } else {
         console.log("Invalid User !!!");
