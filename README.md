@@ -1,11 +1,8 @@
-# Recommended next steps:
-Note: Make sure you have installed native code dependencies [here](https://reactnative.dev/docs/environment-setup#installing-dependencies)
-
-APK Download: [here](https://github.com/abhiparate14/UniConnect/releases/download/v1.0.0/UniConnect.apk)
-
 # UniConnect
 
 UniConnect is an innovative mobile application designed to streamline the university admission process, fostering seamless interaction between students, instructors, and universities. The project leverages React Native for the frontend, Firebase for cloud infrastructure, and incorporates user-friendly features such as dynamic chat functionality, user authentication, and personalized dashboards.
+
+APK Download: [here](https://github.com/abhiparate14/UniConnect/releases/download/v1.0.0/UniConnect.apk)
 
 ## Key Features
 
@@ -41,3 +38,6 @@ UniConnect is an innovative mobile application designed to streamline the univer
 4. Run the app using `npm start`.
 
 Explore UniConnect and revolutionize the university admission experience!
+
+# Recommended next steps:
+Note: Make sure you have installed native code dependencies [here](https://reactnative.dev/docs/environment-setup#installing-dependencies)
