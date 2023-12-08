@@ -11,7 +11,6 @@ const UniversityLogin = () => {
   const navigation = useNavigation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [isError, setError] = React.useState(false);
 
   // start of firebase
 
@@ -21,19 +20,16 @@ const UniversityLogin = () => {
       alert("Please enter email and password");
       return;
     }
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password).then(()=>{
+      navigation.navigate("UniversityHome", {id: username});
+    })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log("error code:", errorCode);
       console.log("error message:", errorMessage);
       alert(errorMessage);
-      setError(true);
     });
-    if(!isError){
-      // notification();
-      navigation.navigate("UniversityHome", {id: username});
-    }
     
   }
   // get the data from firebase

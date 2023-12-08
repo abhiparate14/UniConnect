@@ -132,9 +132,9 @@ const StudentChatScreen = (p) => {
       <StatusBar/>
       {
         user == 'student' ?
-        <Topbar page={InstructorName} id={StudentEmail}/>
+        <Topbar page={InstructorName} id={StudentEmail} user={user}/>
         :
-        <Topbar page={studentName} id={InstructorEmail}/>
+        <Topbar page={studentName} id={InstructorEmail} user={user}/>
       }
       <ScrollView style={styles.scroll}>
      {

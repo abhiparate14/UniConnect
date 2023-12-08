@@ -23,52 +23,11 @@ const RegistrationCommon = () => {
   const [isError, setError] = useState(false);
 
   //STARTFIREBASE-AUTH
-  function createNewUser(email, password){
-    const auth = getAuth(app);
-    if(email === '' || password === ''){
-      alert("Please enter email and password");
-      return;
-    }
-    createUserWithEmailAndPassword(auth, email, password)
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("error code:", errorCode);
-      console.log("error message:", errorMessage);
-      alert(errorMessage);
-      setError(true);
-    });
-    if(!isError){
-      alert("Success");
-    }
-  }
-  //END OF FIREBASE-AUTH
   
-
-    async function sendData() {
-      
-      const firebase= getFirestore(app);
-      const nowId = emailtext;
-
-
-      await setDoc(doc(firebase, valueDropDown, nowId), {
-
-        username: usernameText,
-        email: emailtext,
-        age: agetext,
-        password: passwordtext,
-        dob: selectedDate,
-        type: valueDropDown,
-        photo: "https://firebasestorage.googleapis.com/v0/b/notes-app-44.appspot.com/o/stock_image.png?alt=media&token=905bd8fd-1fae-4728-8069-803c666294b0",
-        MyPreference: [],
-        chatwith: [],
-      });
-    }
-
   // end firebase section
-
+  
   var myPageName = 'LANDINGPAGE';
-
+  
   const printDetails = () => {
     console.log("username is: " + usernameText);
     console.log("email is: " + emailtext);
@@ -77,7 +36,7 @@ const RegistrationCommon = () => {
     console.log("date is: " + selectedDate);
     console.log("type is: " + valueDropDown);
   }
-
+  
   const usernameTextHandler = (username) => {
     if (username != ''){
       setUsernameText(username);
@@ -90,7 +49,7 @@ const RegistrationCommon = () => {
       setEmailText(email);
     }
   }
-
+  
   const ageTextHandler = (age) => {
     if (!isNaN(+age)) {
       setAgeText(age);
@@ -104,28 +63,81 @@ const RegistrationCommon = () => {
     }
     
   }
-
-  const navigatetoanotherpage = (x) => {
-    // printDetails();
-    createNewUser(emailtext, passwordtext).then(()=>{
-      sendData().then(()=>{
-        console.log("data sent");
-      });
+  
+  function createNewUser(email, password) {
+    return new Promise((resolve, reject) => {
+      const auth = getAuth(app);
+      
+      if (email === '' || password === '') {
+        alert("Please enter email and password");
+        reject("Invalid input");
+        return;
+      }
+  
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("Success");
+          resolve();
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("error code:", errorCode);
+          console.log("error message:", errorMessage);
+          alert(errorMessage);
+          reject(errorMessage);
+        });
     });
-    if (valueDropDown == 'student') {
-      myPageName = 'StudentLogin';
-      navigation.navigate(myPageName,{id:emailtext});
-    } else if (valueDropDown == 'instructor') {
-      myPageName = 'InstructerInfo';
-      navigation.navigate(myPageName,{id:emailtext});
-    } else if (valueDropDown == 'university') {
-      myPageName = 'UniversityInfo';
-      navigation.navigate(myPageName,{id:emailtext});
-    } else {
-      myPageName = 'LANDINGPAGE';
+  }
+  
+  const sendData = async () => {
+    try {
+      const firebase = getFirestore(app);
+      const nowId = emailtext;
+  
+      await setDoc(doc(firebase, valueDropDown, nowId), {
+        username: usernameText,
+        email: emailtext,
+        age: agetext,
+        password: passwordtext,
+        dob: selectedDate,
+        type: valueDropDown,
+        photo: "https://firebasestorage.googleapis.com/v0/b/notes-app-44.appspot.com/o/stock_image.png?alt=media&token=905bd8fd-1fae-4728-8069-803c666294b0",
+        MyPreference: [],
+        chatwith: [],
+      });
+  
+      // console.log('inside send data');
+    } catch (error) {
+      console.error("Error sending data:", error);
+      // You can handle the error here
     }
-
   };
+  
+  const navigatetoanotherpage = async () => {
+    try {
+      await createNewUser(emailtext, passwordtext);
+      await sendData();
+      // console.log("data sent");
+  
+      if (valueDropDown == 'student') {
+        myPageName = 'StudentLogin';
+        navigation.navigate(myPageName, { id: emailtext });
+      } else if (valueDropDown == 'instructor') {
+        myPageName = 'InstructerInfo';
+        navigation.navigate(myPageName, { id: emailtext });
+      } else if (valueDropDown == 'university') {
+        myPageName = 'UniversityInfo';
+        navigation.navigate(myPageName, { id: emailtext });
+      } else {
+        myPageName = 'LANDINGPAGE';
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      // Handle the error appropriately
+    }
+  };
+  
 
   const whoIsRegisteringOptions = [
     { label: "Student", value: "student" },

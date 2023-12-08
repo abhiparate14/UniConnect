@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import {app} from '../components/firebase_config';
 import { getFirestore ,getDoc ,doc} from 'firebase/firestore';
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import InstructorInsideStHome from './InstructorInsideStHome';
 import { ScrollView } from 'react-native';
@@ -18,8 +18,8 @@ const StudentHomeUniCard = ({ uni_id ,sid}) => {
     const [ btnPress,setBtnPress ] = useState(false);
     const [ events,setEvents ] = useState('');
 
-    React.useEffect(
-        () => {
+    // React.useEffect(
+    //     () => {
           async function getUserData(){
             const db = getFirestore(app);
             const docRef = doc(db, "university", uni_id);
@@ -36,8 +36,14 @@ const StudentHomeUniCard = ({ uni_id ,sid}) => {
               alert("Invalid User !!!");
             }
           }
+    //       getUserData();
+    // },[]);
+
+    useFocusEffect(
+        React.useCallback(() => {
           getUserData();
-    },[]);
+      },[])
+      );
 
   return (
     <View style={styles.container}>

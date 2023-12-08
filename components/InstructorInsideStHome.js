@@ -56,7 +56,7 @@ const InstructorInsideStHome = ({ id,sid }) => {
     const startChat = () => {
         addinstructornameinstudent().then(()=>{
             addstudentnameininstructor().then(()=>{
-                navigation.navigate('StudentChatScreen', {InstructorEmail: id, StudentEmail : sid, InstructorName: instName});
+                navigation.navigate('StudentChatScreen', {InstructorEmail: id, StudentEmail : sid, InstructorName: instName, user: 'student'});
             });
         });
     };

@@ -1,7 +1,7 @@
 import * as React                         from "react";
 import {  StyleSheet, View, Text }        from "react-native";
 import { Image }                          from "expo-image";
-import { useNavigation }                  from "@react-navigation/native";
+import { useFocusEffect, useNavigation }                  from "@react-navigation/native";
 import { getFirestore ,getDoc ,doc}       from 'firebase/firestore';
 import { ref ,getStorage,getDownloadURL}  from "firebase/storage";
 import { StatusBar }                      from "expo-status-bar";
@@ -22,8 +22,7 @@ const InsructerDetails = (p) => {
   const [ age, setAge ] = React.useState('Age');
   const [ dob, setDob ] = React.useState('Date of Birth');
   const [profilepic,setProfilepic]=React.useState('');
-  React.useEffect(
-    () => {
+
       async function getUserData(){
         const db = getFirestore(app);
         const docRef = doc(db, "instructor", iid);
@@ -39,8 +38,11 @@ const InsructerDetails = (p) => {
           console.log("Invalid User !!!");
         }
       }
-      getUserData();
-},[])
+      useFocusEffect(
+        ()=>{
+          getUserData();
+        }
+      );
 
   return (
     <View style={styles.studentProfile}>

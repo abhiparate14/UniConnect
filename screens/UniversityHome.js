@@ -37,6 +37,7 @@ const UniversityHome = (p) => {
         await updateDoc(docRef, updatedData).then(()=>{
           console.log('updated');
         })
+        setEventText('');
     }
   }
 
@@ -86,6 +87,7 @@ const UniversityHome = (p) => {
           placeholder="write here"
           style={styles.txtbox}
           onChangeText={(txt) => setEventText(txt)}
+          value={eventText}
         />
         <TouchableOpacity style={styles.btnbox} onPress={() => buttonHandler()}>
           <Text style={styles.btntxt}>Add Event</Text>

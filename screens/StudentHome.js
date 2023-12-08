@@ -43,19 +43,27 @@ const StudentHome = (p) => {
         <Text style={styles.username}>{username}</Text>
       </View>
       <ScrollView style={styles.scrollview}>
-      {
-        mypref.length>0?
-        mypref.map((uni) => {
-          return (
-            <StudentHomeUniCard uni_id={uni} sid={id}/>
-          );
-        })
-        :
-        <View style={{flexDirection: "column",justifyContent: 'center',alignItems: 'center',height: '100%',width: "100%"}}>
-          <Text style={{fontSize: 25}}>No University Added</Text></View>
-      }
+        {mypref ? (
+          mypref.length > 0 ? (
+            mypref.map((uni) => {
+              return <StudentHomeUniCard uni_id={uni} sid={id} />;
+            })
+          ) : (
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <Text style={{ fontSize: 25 }}>No University Added</Text>
+            </View>
+          )
+        ) : null}
       </ScrollView>
-      <BottomBarStudent page={'StudentHome'} id={id}/>
+      <BottomBarStudent page={"StudentHome"} id={id} />
     </View>
   );
 };

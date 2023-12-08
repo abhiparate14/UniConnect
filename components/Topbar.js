@@ -3,17 +3,28 @@ import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
-const Topbar = ({page, id}) => {
+const Topbar = ({page, id, user}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Ionicons 
-        name="arrow-back" 
-        size={24} 
-        color="black" 
-        style={styles.logo}
-        onPress={() => navigation.navigate('StudentChat', {id: id})}
-      />
+      {
+        user == 'student' ?
+        <Ionicons 
+          name="arrow-back" 
+          size={24} 
+          color="black" 
+          style={styles.logo}
+          onPress={() => navigation.navigate('StudentChat', {id: id})}
+        />
+        :
+        <Ionicons 
+          name="arrow-back" 
+          size={24} 
+          color="black" 
+          style={styles.logo}
+          onPress={() => navigation.navigate('InsructerChat', {id: id})}
+        />
+      }
       <Text style={styles.txt1}>{page}</Text>
     </View>
   )
