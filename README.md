@@ -3,11 +3,41 @@ Note: Make sure you have installed native code dependencies [here](https://react
 
 APK Download: [here](https://github.com/abhiparate14/UniConnect/releases/download/v1.0.0/UniConnect.apk)
 
-### To preview and run the project on your device:
-1. Open project folder in <u>Visual Studio Code</u>
-2. Run  `npm install`  in the terminal
-3. Run  `npx expo start`  in the terminal
-4. Run on For iOS device (only on MacOS)
-    1. Press  `i`  to view on iOS simulator or follow the instructions [here](https://docs.expo.dev/workflow/run-on-device/) to run on a physical device.
-5. Run on For android device
-    1. Press  `a`  to view on Android Virtual Device or follow the instructions [here](https://docs.expo.dev/workflow/run-on-device/) to run on a physical device.
+# UniConnect
+
+UniConnect is an innovative mobile application designed to streamline the university admission process, fostering seamless interaction between students, instructors, and universities. The project leverages React Native for the frontend, Firebase for cloud infrastructure, and incorporates user-friendly features such as dynamic chat functionality, user authentication, and personalized dashboards.
+
+## Key Features
+
+- **User-Friendly Interface**: Intuitive design for students, instructors, and universities.
+
+- **Real-time Chat**: Facilitates communication between users for a personalized experience.
+
+- **Cloud Infrastructure**: Firebase integration ensures a scalable and responsive system.
+
+- **Multi-Role Access**: Students, instructors, and universities each have tailored access and functionalities.
+
+- **Efficient Admission Process**: Simplifies and expedites the university admission procedure.
+
+## Tech Stack
+
+- **Frontend**: React Native
+- **Backend**: Firebase (Cloud Firestore)
+- **Authentication**: Firebase Authentication
+
+## Project Structure
+
+- **Mobile App**: React Native codebase for cross-platform deployment.
+
+- **Firebase Configuration**: Cloud Firestore for real-time data storage and retrieval.
+
+- **User Authentication**: Firebase Authentication for secure and seamless login.
+
+## Getting Started
+
+1. Clone the repository.
+2. Install dependencies using `npm install`.
+3. Configure Firebase credentials.
+4. Run the app using `npm start`.
+
+Explore UniConnect and revolutionize the university admission experience!
