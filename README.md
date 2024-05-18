@@ -39,5 +39,15 @@ APK Download: [here](https://github.com/abhiparate14/UniConnect/releases/downloa
 
 Explore UniConnect and revolutionize the university admission experience!
 
+## Running Tests
+
+To run tests, use the command:
+
+```
+npm test
+```
+
+This will execute all the test cases using Jest. For contributing to test writing, please refer to the testing guidelines provided in the `CONTRIBUTING.md` file.
+
 # Recommended next steps:
 Note: Make sure you have installed native code dependencies [here](https://reactnative.dev/docs/environment-setup#installing-dependencies)
